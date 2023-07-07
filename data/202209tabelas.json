@@ -1,0 +1,306 @@
+{
+    "DATA_DA_TABELA": "09/2022",
+    "CIRURGIAS_EQUIPE": {
+        "Abdominoplastia": {
+            "tempo": 3,
+            "diaria": 1,
+            "valor": 6825
+        },
+        "Mini-Abominoplastia": {
+            "tempo": 2,
+            "diaria": 1,
+            "valor": 4800
+        },
+        "Lipoescultura(3h)": {
+            "tempo": 4,
+            "diaria": 1,
+            "valor": 6825
+        },
+        "Lipoescultura(2,5h)": {
+            "tempo": 4,
+            "diaria": 1,
+            "valor": 6825
+        },
+        "Mamoplastia": {
+            "tempo": 4,
+            "diaria": 1,
+            "valor": 7000
+        },
+        "Mamoplastia com Prótese": {
+            "tempo": 4,
+            "diaria": 1,
+            "valor": 11550
+        },
+        "Prótese de Mama": {
+            "tempo": 2,
+            "diaria": 0,
+            "valor": 4550
+        },
+        "Blefaro sup": {
+            "tempo": 1,
+            "diaria": 0,
+            "valor": 3250
+        },
+        "Blefaro inf": {
+            "tempo": 2,
+            "diaria": 0,
+            "valor": 3950
+        },
+        "Blefaro sup e inf": {
+            "tempo": 3,
+            "diaria": 0,
+            "valor": 4550
+        },
+        "Rinoplastia": {
+            "tempo": 3,
+            "diaria": 0,
+            "valor": 5850
+        },
+        "Braquioplastia": {
+            "tempo": 2,
+            "diaria": 0,
+            "valor": 5200
+        },
+        "Cruroplastia": {
+            "tempo": 3,
+            "diaria": 1,
+            "valor": 6890
+        },
+        "Ginecomastia": {
+            "tempo": 2,
+            "diaria": 0,
+            "valor": 3900
+        },
+        "Ninfoplastia": {
+            "tempo": 1,
+            "diaria": 0,
+            "valor": 3900
+        },
+        "Otoplastia": {
+            "tempo": 2,
+            "diaria": 0,
+            "valor": 3900
+        },
+        "Lipoaspiração": {
+            "tempo": 1,
+            "diaria": 0,
+            "valor": 2275
+        }
+    },
+    "CIRURGIAS_DUPLAS": [
+        [
+            "Abdominoplastia",
+            "Lipoescultura(2,5h)"
+        ],
+        [
+            "Lipoescultura(3h)",
+            "Mamoplastia"
+        ],
+        [
+            "Lipoescultura(3h)",
+            "Mamoplastia com Prótese"
+        ],
+        [
+            "Abdominoplastia",
+            "Mamoplastia"
+        ],
+        [
+            "Abdominoplastia",
+            "Mamoplastia com Prótese"
+        ],
+        [
+            "Abdominoplastia",
+            "Prótese de Mama"
+        ],
+        [
+            "Rinoplastia",
+            "Prótese de Mama"
+        ],
+        [
+            "Lipoescultura(3h)",
+            "Prótese de Mama"
+        ],
+        [
+            "Rinoplastia",
+            "Lipoescultura(3h)"
+        ],
+        [
+            "Mini-Abominoplastia",
+            "Lipoescultura(2,5h)"
+        ]
+    ],
+    "CIRURGIAS_TRIPLAS": [
+        [
+            "Abdominoplastia",
+            "Lipoescultura(2,5h)",
+            "Prótese de Mama"
+        ],
+        [
+            "Lipoescultura(2,5h)",
+            "Mini-Abominoplastia",
+            "Mamoplastia"
+        ],
+        [
+            "Lipoescultura(2,5h)",
+            "Mini-Abominoplastia",
+            "Mamoplastia com Prótese"
+        ],
+        [
+            "Lipoescultura(2,5h)",
+            "Mini-Abominoplastia",
+            "Prótese de Mama"
+        ]
+    ],
+    "ANESTESIA_FOZ": {
+        "Abdominoplastia": 2045,
+        "Mini-Abominoplastia": 1620,
+        "Lipoaspiração": 1315,
+        "Lipoescultura(2,5h)": 1315,
+        "Lipoescultura(3h)": 1315,
+        "Mamoplastia": 2045,
+        "Mamoplastia com Prótese": 2045,
+        "Prótese de Mama": 1335,
+        "Blefaro sup": 865,
+        "Blefaro inf": 865,
+        "Blefaro sup e inf": 1297.5,
+        "Rinoplastia": 2045,
+        "Braquioplastia": 2045,
+        "Cruroplastia": 2045,
+        "Ginecomastia": 1125,
+        "Ninfoplastia": 790,
+        "Otoplastia": 935
+    },
+    "ANESTESIA_RENATA": {
+        "Abdominoplastia": 1200,
+        "Mini-Abominoplastia": 1000,
+        "Lipoaspiração": 1200,
+        "Lipoescultura(2,5h)": 1400,
+        "Lipoescultura(3h)": 1400,
+        "Mamoplastia": 1200,
+        "Mamoplastia com Prótese": 1200,
+        "Prótese de Mama": 1000,
+        "Blefaro sup": 650,
+        "Blefaro inf": 650,
+        "Blefaro sup e inf": 800,
+        "Rinoplastia": 1250,
+        "Braquioplastia": 1000,
+        "Cruroplastia": 1000,
+        "Ginecomastia": 900,
+        "Ninfoplastia": 600,
+        "Otoplastia": 650,
+        "Consulta": 250,
+        "Consulta-": 150,
+        "Abdominoplastia, Lipoescultura(2,5h)": 1700,
+        "Abdominoplastia, Lipoescultura(3h)": 1700,
+        "Abdominoplastia, Lipoaspiração": 1700,
+        "Lipoescultura(3h), Mamoplastia": 1700,
+        "Lipoescultura(3h), Mamoplastia com Prótese": 1700,
+        "Abdominoplastia, Mamoplastia": 1700,
+        "Abdominoplastia, Mamoplastia com Prótese": 1700,
+        "Abdominoplastia, Prótese de Mama": 1500,
+        "Prótese de Mama, Rinoplastia": 1500,
+        "Lipoescultura(3h), Prótese de Mama": 1700,
+        "Lipoescultura(3h), Rinoplastia": 1700,
+        "Abdominoplastia, Mini-Abominoplastia": 1700,
+        "Lipoescultura(2,5h), Mini-Abominoplastia": 1700,
+        "Abdominoplastia, Lipoescultura(2,5h), Prótese de Mama": 2200,
+        "Lipoescultura(2,5h), Mamoplastia, Mini-Abominoplastia": 2000,
+        "Lipoescultura(2,5h), Mamoplastia com Prótese, Mini-Abominoplastia": 2000,
+        "Lipoescultura(2,5h), Mini-Abominoplastia, Prótese de Mama": 1700
+    },
+    "RENATA_CONS_MENOS": [
+        "Blefaro sup",
+        "Blefaro inf",
+        "Blefaro sup e inf",
+        "Ninfoplastia",
+        "Otoplastia"
+    ],
+    "HMCC": {
+        "1": {
+            "0": 1350,
+            "1": 1700
+        },
+        "2": {
+            "0": 2600,
+            "1": 2900
+        },
+        "3": {
+            "0": 3500,
+            "1": 3800
+        },
+        "4": {
+            "0": 4150,
+            "1": 4450
+        },
+        "5": {
+            "0": 5350,
+            "1": 5650
+        },
+        "6": {
+            "0": 6250,
+            "1": 6550
+        }
+    },
+    "UNIMED": {
+        "1": {
+            "0": 1250,
+            "1": 1550
+        },
+        "2": {
+            "0": 2400,
+            "1": 2650
+        },
+        "3": {
+            "0": 3200,
+            "1": 3500
+        },
+        "4": {
+            "0": 3800,
+            "1": 4050
+        },
+        "5": {
+            "0": 4850,
+            "1": 5250
+        },
+        "6": {
+            "0": 5800,
+            "1": 6100
+        }
+    },
+    "HMD": {
+        "1": {
+            "0": 1200,
+            "1": 1400
+        },
+        "2": {
+            "0": 2300,
+            "1": 2600
+        },
+        "3": {
+            "0": 3200,
+            "1": 3400
+        },
+        "4": {
+            "0": 3700,
+            "1": 4000
+        },
+        "5": {
+            "0": 4700,
+            "1": 5100
+        },
+        "6": {
+            "0": 5700,
+            "1": 6000
+        }
+    },
+    "PROTESES": {
+        "Texturizada": 3070,
+        "Poliuretano": 4050
+    },
+    "LIPO_MENOS_1H": [
+        "Mini-Abominoplastia",
+        "Prótese de Mama",
+        "Ginecomastia",
+        "Otoplastia"
+    ]
+}
