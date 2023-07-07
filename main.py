@@ -9,8 +9,9 @@ def calculate(checked_boxes, extra_values, data):
     try:
         nome_cirurgia = checked_boxes
         extras = extra_values
-        valor_protese = extras[1]
-        tempo_lipo = extras[2]
+        valor_protese = float(extras[1].replace(",", "."))
+        tempo_lipo = float(extras[2].replace(",", "."))
+        tipo_protese = extras[7]
         if not nome_cirurgia:
             st.error(f"Nenhuma cirurgia selecionada, tente novamente")
             return
@@ -31,27 +32,26 @@ def calculate(checked_boxes, extra_values, data):
         tempo, diaria = qm.tempo_diaria(
             nome_cirurgia, data["CIRURGIAS_EQUIPE"], data["LIPO_MENOS_1H"], tempo_lipo
         )
-        if extras[3]:
+        if extras[3] != "0":
             tempo = int(extras[3])
         if extras[4]:
             diaria = int(extras[4])
         valor_equipe_cirurgia = qm.valor_equipe(
             nome_cirurgia, data["CIRURGIAS_EQUIPE"], ajuste_q, tempo_lipo
         )
-
         valor_anestesista_foz = qm.valor_anestesia_foz(
             nome_cirurgia, tempo_lipo, data["ANESTESIA_FOZ"]
         )
         valor_anestesia_renata = qm.valor_anestesia_renata(
             nome_cirurgia, data["ANESTESIA_RENATA"], data["RENATA_CONS_MENOS"])
 
-        if extras[5] != 0:
+        if extras[5] != "0":
             valor_anestesista_foz = int(extras[5])
             valor_anestesia_renata = int(extras[5])
 
-        if extras[6] != 0:
+        if extras[6] != "0":
             valor_equipe_cirurgia = int(extras[6])
-
+        
         valor_hosp_hmcc = qm.valor_hmcc(tempo, diaria, data["HMCC"])
         valor_hosp_unimed = qm.valor_unimed(tempo, diaria, data["UNIMED"])
         valor_hosp_hmd = qm.valor_hmd(tempo, diaria, data["HMD"])
@@ -63,34 +63,26 @@ def calculate(checked_boxes, extra_values, data):
         valor_total_hmd = valor_equipe_cirurgia + \
             valor_anestesia_renata + valor_hosp_hmd
         print_cir = " , ".join(nome_cirurgia)
-        # show_calculo("debug", "\n" + "#" * 29 + "\n")
-        st.write(
-            "info", f"Cirurgia(s) a ser(em) realizada(s): {print_cir}")
-        st.write("debug", f"Tempo total de sala: {tempo} horas")
-        st.write("debug", f"Dias de internamento: {diaria}")
-        st.write("log", f"Valor da equipe: R$ {valor_equipe_cirurgia}")
-        st.write(
-            "warn", f"Valor da anestesia HMCC/ Unimed: R$ {valor_anestesista_foz}")
-        st.write(
-            "debug", f"Valor da anestesia HMD: R$ {valor_anestesia_renata}")
+        st.write(f"Cirurgia(s) a ser(em) realizada(s): {print_cir}")
+        st.write(f"Tempo total de sala: {tempo} horas")
+        st.write(f"Dias de internamento: {diaria}")
+        st.write(f"Valor da equipe: R$ {valor_equipe_cirurgia}")
+        st.write(f"Valor da anestesia HMCC/ Unimed: R$ {valor_anestesista_foz}")
+        st.write(f"Valor da anestesia HMD: R$ {valor_anestesia_renata}")
         if valor_protese != 0:
             valor_total_hmcc += valor_protese
             valor_total_unimed += valor_protese
             valor_total_hmd += valor_protese
-            st.write(
-                "info", f"Valor da prótese {tipo_protese}: {valor_protese}")
+            st.write(f"Valor da prótese {tipo_protese}: {valor_protese}")
         if tempo_lipo > 0:
-            st.write("info", f"Tempo de Lipo: {tempo_lipo} horas")
-        st.write(
-            "debug", f"Valor do hospitalar HMD: R$ {valor_hosp_hmd}")    
-        st.write(
-            "debug", f"Valor do hospitalar Unimed: R$ {valor_hosp_unimed}")
-        st.write(
-            "warn", f"Valor do hospitalar HMCC: R$ {valor_hosp_hmcc}")
-        st.write("debug", f"Valor total HMD: R$ {valor_total_hmd}")
-        st.write("debug", f"Valor total Unimed: R$ {valor_total_unimed}")
-        st.write("warn", f"Valor total HMCC: R$ {valor_total_hmcc}")
-        st.write("debug", "\n" + "#" * 29 + "\n")
+            st.write(f"Tempo de Lipo: {tempo_lipo} horas")
+        st.write(f"Valor do hospitalar HMD: R$ {valor_hosp_hmd}")    
+        st.write(f"Valor do hospitalar Unimed: R$ {valor_hosp_unimed}")
+        st.write(f"Valor do hospitalar HMCC: R$ {valor_hosp_hmcc}")
+        st.write(f"Valor total HMD: R$ {valor_total_hmd}")
+        st.write(f"Valor total Unimed: R$ {valor_total_unimed}")
+        st.write(f"Valor total HMCC: R$ {valor_total_hmcc}")
+        st.write("\n" + "#" * 29 + "\n")
     except Exception as e:
         st.error(f"Prencha todos os campos ou deixe em '0'.\nErro: {e}")
         print(e)
@@ -106,27 +98,35 @@ files = os.listdir(data_dir)
 # Cria uma lista vazia para armazenar as opções do menu suspenso
 options = []
 
+# Cria uma lista vazia para armazenar os nomes dos arquivos .json
+json_files = []
+
 # Itera sobre cada arquivo no diretório "data"
 for f in files:
     # Verifica se o arquivo tem a extensão ".json"
     if f.endswith(".json"):
+        # Adiciona o nome do arquivo à lista de arquivos .json
+        json_files.append(f)
+        
         # Define o caminho completo para o arquivo
         file_path = os.path.join(data_dir, f)
         
         # Abre o arquivo e carrega o conteúdo como um dicionário
         with open(file_path, "r", encoding='utf-8') as json_file:
-            data = json.load(json_file)
-            
-            # Verifica se a chave "DATA_DA_TABELA" está presente no dicionário
-            if "DATA_DA_TABELA" in data:
-                # Adiciona o valor associado à chave "DATA_DA_TABELA" à lista de opções
-                options.append(data["DATA_DA_TABELA"])
+            data = json.load(json_file)            
+            options.append(data["DATA_DA_TABELA"])
 
-# Inverte a ordem das opções na lista
-options.reverse()
 
-# Cria o menu suspenso na barra lateral com as opções
-selected_option = st.sidebar.selectbox("Escolha uma tabela de preço:", options)
+
+# Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
+sorted_dates = sorted(options, key=lambda x: (x.split('/')[1], x.split('/')[0]), reverse=True)
+selected_tabela = st.sidebar.selectbox("Escolha uma tabela de preço:", sorted_dates)
+
+# Carrega o arquivo .json correspondente à tabela selecionada
+if selected_tabela:
+    with open(os.path.join(data_dir, json_files[options.index(selected_tabela)]), "r", encoding='utf-8') as json_file:
+        data_tabela = json.load(json_file)
+        
 
 ####### Pagina principal #######
 
@@ -167,49 +167,37 @@ col3, col4 = st.columns(2)
 # Cria um dicionário vazio para armazenar o status de cada checkbox
 checkbox_status = {}
 
-# Itera sobre cada arquivo no diretório "data"
-for f in files:
-    # Verifica se o arquivo tem a extensão ".json"
-    if f.endswith(".json"):
-        # Define o caminho completo para o arquivo
-        file_path = os.path.join(data_dir, f)
-        
-        # Abre o arquivo e carrega o conteúdo como um dicionário
-        with open(file_path, "r", encoding="utf-8") as json_file:
-            data = json.load(json_file)
-            
-            # Verifica se a chave "DATA_DA_TABELA" está presente no dicionário e corresponde à opção selecionada pelo usuário
-            if "DATA_DA_TABELA" in data and data["DATA_DA_TABELA"] == selected_option:
-                # Verifica se a chave "CIRURGIAS_EQUIPE" está presente no dicionário
-                if "CIRURGIAS_EQUIPE" in data:
-                    # Ordena os valores na lista associada à chave "CIRURGIAS_EQUIPE" em ordem alfabética
-                    sorted_values = sorted(data["CIRURGIAS_EQUIPE"])
-                    
-                    # Calcula o número de valores em cada coluna
-                    values_per_column = math.ceil(len(sorted_values) / 2)
-                    
-                    # Itera sobre cada valor na lista ordenada
-                    for i, value in enumerate(sorted_values):
-                        # Verifica se o índice é menor que o número de valores por coluna
-                        if i < values_per_column:
-                            # Cria um checkbox na primeira coluna e associa seu status a uma variável no dicionário checkbox_status
-                            checkbox_status[value] = col3.checkbox(value)
-                        else:
-                            # Cria um checkbox na segunda coluna e associa seu status a uma variável no dicionário checkbox_status
-                            checkbox_status[value] = col4.checkbox(value)
 
-selected_protese = st.selectbox("Escolha uma Textura", ["Texturizada", "Poliuretano"])
+# Verifica se a chave "CIRURGIAS_EQUIPE" está presente no dicionário
+if "CIRURGIAS_EQUIPE" in data_tabela:
+    # Ordena os valores na lista associada à chave "CIRURGIAS_EQUIPE" em ordem alfabética
+    sorted_values = sorted(data_tabela["CIRURGIAS_EQUIPE"])
+    
+    # Calcula o número de valores em cada coluna
+    values_per_column = math.ceil(len(sorted_values) / 2)
+    
+    # Itera sobre cada valor na lista ordenada
+    for i, value in enumerate(sorted_values):
+        # Verifica se o índice é menor que o número de valores por coluna
+        if i < values_per_column:
+            # Cria um checkbox na primeira coluna e associa seu status a uma variável no dicionário checkbox_status
+            checkbox_status[value] = col3.checkbox(value)
+        else:
+            # Cria um checkbox na segunda coluna e associa seu status a uma variável no dicionário checkbox_status
+            checkbox_status[value] = col4.checkbox(value)
+
+tipo_protese = st.selectbox("Escolha uma Textura", ["Texturizada", "Poliuretano"])
 
 # Cria um menu suspenso expansível com o título "Extras"
 with st.expander("Extras"):
     # Cria campos de entrada para os valores especificados
-    valor_ajuste = st.number_input("Valor de Ajuste:", min_value=0.0, step=0.01)
-    valor_protese = st.number_input("Valor da Prótese:", min_value=0.0, step=0.01)
-    tempo_lipo = st.number_input("Tempo de Lipo (h):", min_value=0.0, step=0.01)
-    tempo_sala = st.number_input("Tempo de Sala (h):", min_value=0.0, step=0.01)
-    dias_internamento = st.number_input("Dias de internamento:", min_value=0, step=1)
-    valor_anestesia = st.number_input("Valor Anestesia:", min_value=0.0, step=0.01)
-    valor_equipe = st.number_input("Valor Equipe:", min_value=0.0, step=0.01)
+    valor_ajuste = st.text_input("Valor de Ajuste:", value="0")
+    valor_protese = st.text_input("Valor da Prótese:", value="0")
+    tempo_lipo = st.text_input("Tempo de Lipo (h):", value="0")
+    tempo_sala = st.text_input("Tempo de Sala (h):", value="0")
+    dias_internamento = st.text_input("Dias de internamento:", value="")
+    valor_anestesia = st.text_input("Valor Anestesia:", value="0")
+    valor_equipe = st.text_input("Valor Equipe:", value="0")
     
 # Cria um botão "Calcular"
 if st.button("Calcular"):
@@ -224,7 +212,7 @@ if st.button("Calcular"):
             checked_boxes.append(key)
             
     # Cria uma lista para armazenar os valores dos campos extras
-    extra_values = [valor_ajuste, valor_protese, tempo_lipo, tempo_sala, dias_internamento, valor_anestesia, valor_equipe, selected_protese]
+    extra_values = [valor_ajuste, valor_protese, tempo_lipo, tempo_sala, dias_internamento, valor_anestesia, valor_equipe, tipo_protese]
     
     # Chama a função calculate quando o botão for clicado
-    calculate(checked_boxes, extra_values, data)
+    calculate(checked_boxes, extra_values, data_tabela)
