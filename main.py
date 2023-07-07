@@ -2,6 +2,98 @@ import os
 import json
 import streamlit as st
 import math
+import qmod as qm
+
+# Define a função calculate
+def calculate(checked_boxes, extra_values, data):
+    try:
+        nome_cirurgia = checked_boxes
+        extras = extra_values
+        valor_protese = extras[1]
+        tempo_lipo = extras[2]
+        if not nome_cirurgia:
+            st.error(f"Nenhuma cirurgia selecionada, tente novamente")
+            return
+        if "Lipoescultura(2,5h)" in nome_cirurgia:
+            if tempo_lipo == 0:
+                tempo_lipo = 2.5
+        elif "Lipoescultura(3h)" in nome_cirurgia:
+            if tempo_lipo == 0:
+                tempo_lipo = 3.5
+        elif "Lipoaspiração" in nome_cirurgia and tempo_lipo == 0:
+            st.warning("Escolha o tempo de lipoaspiração")
+            return
+        if "Mamoplastia com Prótese" in nome_cirurgia or "Prótese de Mama" in nome_cirurgia:
+            tipo_protese = extras[7]
+            if valor_protese == 0:
+                valor_protese = int(data["PROTESES"][tipo_protese])
+        ajuste_q = extras[0]
+        tempo, diaria = qm.tempo_diaria(
+            nome_cirurgia, data["CIRURGIAS_EQUIPE"], data["LIPO_MENOS_1H"], tempo_lipo
+        )
+        if extras[3]:
+            tempo = int(extras[3])
+        if extras[4]:
+            diaria = int(extras[4])
+        valor_equipe_cirurgia = qm.valor_equipe(
+            nome_cirurgia, data["CIRURGIAS_EQUIPE"], ajuste_q, tempo_lipo
+        )
+
+        valor_anestesista_foz = qm.valor_anestesia_foz(
+            nome_cirurgia, tempo_lipo, data["ANESTESIA_FOZ"]
+        )
+        valor_anestesia_renata = qm.valor_anestesia_renata(
+            nome_cirurgia, data["ANESTESIA_RENATA"], data["RENATA_CONS_MENOS"])
+
+        if extras[5] != 0:
+            valor_anestesista_foz = int(extras[5])
+            valor_anestesia_renata = int(extras[5])
+
+        if extras[6] != 0:
+            valor_equipe_cirurgia = int(extras[6])
+
+        valor_hosp_hmcc = qm.valor_hmcc(tempo, diaria, data["HMCC"])
+        valor_hosp_unimed = qm.valor_unimed(tempo, diaria, data["UNIMED"])
+        valor_hosp_hmd = qm.valor_hmd(tempo, diaria, data["HMD"])
+        valor_total_hmcc = valor_equipe_cirurgia + \
+            valor_anestesista_foz + valor_hosp_hmcc
+        valor_total_unimed = (
+            valor_equipe_cirurgia + valor_anestesista_foz + valor_hosp_unimed
+        )
+        valor_total_hmd = valor_equipe_cirurgia + \
+            valor_anestesia_renata + valor_hosp_hmd
+        print_cir = " , ".join(nome_cirurgia)
+        # show_calculo("debug", "\n" + "#" * 29 + "\n")
+        st.write(
+            "info", f"Cirurgia(s) a ser(em) realizada(s): {print_cir}")
+        st.write("debug", f"Tempo total de sala: {tempo} horas")
+        st.write("debug", f"Dias de internamento: {diaria}")
+        st.write("log", f"Valor da equipe: R$ {valor_equipe_cirurgia}")
+        st.write(
+            "warn", f"Valor da anestesia HMCC/ Unimed: R$ {valor_anestesista_foz}")
+        st.write(
+            "debug", f"Valor da anestesia HMD: R$ {valor_anestesia_renata}")
+        if valor_protese != 0:
+            valor_total_hmcc += valor_protese
+            valor_total_unimed += valor_protese
+            valor_total_hmd += valor_protese
+            st.write(
+                "info", f"Valor da prótese {tipo_protese}: {valor_protese}")
+        if tempo_lipo > 0:
+            st.write("info", f"Tempo de Lipo: {tempo_lipo} horas")
+        st.write(
+            "debug", f"Valor do hospitalar HMD: R$ {valor_hosp_hmd}")    
+        st.write(
+            "debug", f"Valor do hospitalar Unimed: R$ {valor_hosp_unimed}")
+        st.write(
+            "warn", f"Valor do hospitalar HMCC: R$ {valor_hosp_hmcc}")
+        st.write("debug", f"Valor total HMD: R$ {valor_total_hmd}")
+        st.write("debug", f"Valor total Unimed: R$ {valor_total_unimed}")
+        st.write("warn", f"Valor total HMCC: R$ {valor_total_hmcc}")
+        st.write("debug", "\n" + "#" * 29 + "\n")
+    except Exception as e:
+        st.error(f"Prencha todos os campos ou deixe em '0'.\nErro: {e}")
+        print(e)
 
 # Define o caminho para o diretório "data"
 data_dir = "data"
@@ -70,7 +162,7 @@ with col2:
 ####### Cirurgias #######
     
 # Cria duas colunas
-col1, col2 = st.columns(2)
+col3, col4 = st.columns(2)
 
 # Cria um dicionário vazio para armazenar o status de cada checkbox
 checkbox_status = {}
@@ -101,10 +193,12 @@ for f in files:
                         # Verifica se o índice é menor que o número de valores por coluna
                         if i < values_per_column:
                             # Cria um checkbox na primeira coluna e associa seu status a uma variável no dicionário checkbox_status
-                            checkbox_status[value] = col1.checkbox(value)
+                            checkbox_status[value] = col3.checkbox(value)
                         else:
                             # Cria um checkbox na segunda coluna e associa seu status a uma variável no dicionário checkbox_status
-                            checkbox_status[value] = col2.checkbox(value)
+                            checkbox_status[value] = col4.checkbox(value)
+
+selected_protese = st.selectbox("Escolha uma Textura", ["Texturizada", "Poliuretano"])
 
 # Cria um menu suspenso expansível com o título "Extras"
 with st.expander("Extras"):
@@ -117,6 +211,20 @@ with st.expander("Extras"):
     valor_anestesia = st.number_input("Valor Anestesia:", min_value=0.0, step=0.01)
     valor_equipe = st.number_input("Valor Equipe:", min_value=0.0, step=0.01)
     
-for key, value in checkbox_status.items():
-    if value:
-        st.markdown(f"<span style='color: blue'>{key}</span>", unsafe_allow_html=True)
+# Cria um botão "Calcular"
+if st.button("Calcular"):
+    # Cria uma lista vazia para armazenar os nomes dos checkboxes marcados
+    checked_boxes = []
+    
+    # Itera sobre cada item no dicionário checkbox_status
+    for key, value in checkbox_status.items():
+        # Verifica se o checkbox está marcado
+        if value:
+            # Adiciona o nome do checkbox à lista checked_boxes
+            checked_boxes.append(key)
+            
+    # Cria uma lista para armazenar os valores dos campos extras
+    extra_values = [valor_ajuste, valor_protese, tempo_lipo, tempo_sala, dias_internamento, valor_anestesia, valor_equipe, selected_protese]
+    
+    # Chama a função calculate quando o botão for clicado
+    calculate(checked_boxes, extra_values, data)
