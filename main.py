@@ -58,17 +58,22 @@ def main():
 
     ####### IMC #######
 
+    # Header
+    st.header("Calculadora Dr. Thiago Jung")
+    st.divider()
     # Cria duas colunas
     col1, col2 = st.columns(2)
 
     # Cria campos para o usuário inserir sua altura e peso na primeira coluna
     with col1:
-        altura_cm = st.number_input("Insira sua altura (em cm):", min_value=0, value=170, step=1)
-        peso = st.number_input("Insira seu peso (em kg):", min_value=0.0, value=70.0, step=0.1)
+        altura_cm = st.text_input("Insira sua altura (em cm):", value=170)
+        peso = st.text_input("Insira seu peso (em kg):", value=70.0)
 
     # Converte a altura do usuário de centímetros para metros
+    altura_cm = float(altura_cm)
+    peso = float(peso.replace(",", "."))
     altura = altura_cm / 100
-
+    
     # Calcula o IMC
     imc = peso / (altura * altura)
 
@@ -81,12 +86,12 @@ def main():
         peso_imc_30 = 30 * (altura * altura)
 
         # Mostra os pesos correspondentes aos IMCs 28 e 30 para a altura do usuário
-        st.write(f"Para um IMC de 28 com sua altura, seu peso deveria ser: {peso_imc_28:.2f} kg")
-        st.write(f"Para um IMC de 30 com sua altura, seu peso deveria ser: {peso_imc_30:.2f} kg")
+        st.write(f"Para um IMC de 28, o peso seria: {peso_imc_28:.2f} kg")
+        st.write(f"Para um IMC de 30, o peso seria: {peso_imc_30:.2f} kg")
 
-
+    st.divider()
     ####### Cirurgias #######
-        
+    st.subheader("Cirurgias")
     # Cria duas colunas
     col3, col4 = st.columns(2)
 
@@ -112,8 +117,9 @@ def main():
                 # Cria um checkbox na segunda coluna e associa seu status a uma variável no dicionário checkbox_status
                 checkbox_status[value] = col4.checkbox(value)
 
+    st.divider()
     tipo_protese = st.selectbox("Escolha uma Textura", ["Texturizada", "Poliuretano"])
-
+    st.divider()
     # Cria um menu suspenso expansível com o título "Extras"
     with st.expander("Extras"):
         # Cria campos de entrada para os valores especificados
@@ -151,6 +157,7 @@ def main():
             message = ""
             for entry in conversation:
                 message += entry["message"]
+            st.divider()
             st.text_area(" ", value=message, height=800, max_chars=10000)
 
             # Update the session state
