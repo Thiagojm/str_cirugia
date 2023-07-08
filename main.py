@@ -1,9 +1,11 @@
 import os
 import json
 import streamlit as st
+import streamlit_authenticator as stauth
 import math
 import qmod as qm
-
+import yaml
+from yaml.loader import SafeLoader
 
 def main():
     # Define o caminho para o diretório "data"
@@ -45,6 +47,7 @@ def main():
         st.session_state.session = SessionState()
 
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
+    authenticator.logout("Logout", "sidebar")
     sorted_dates = sorted(options, key=lambda x: (x.split('/')[1], x.split('/')[0]), reverse=True)
     selected_tabela = st.sidebar.selectbox("Escolha uma tabela de preço:", sorted_dates)
 
@@ -166,4 +169,25 @@ def main():
             st.info('Selecione pelo menos uma cirurgia', icon="ℹ️")
     
 if __name__ == "__main__":
-    main()
+    # Autenticação
+    with open('config.yaml') as file:
+        config = yaml.load(file, Loader=SafeLoader)
+
+    authenticator = stauth.Authenticate(
+        config['credentials'],
+        config['cookie']['name'],
+        config['cookie']['key'],
+        config['cookie']['expiry_days'],
+        config['preauthorized']
+)
+
+    name, authentication_status, username = authenticator.login("Login", "main")
+    if authentication_status == False:
+        st.error("Username/password is incorrect")
+
+    if authentication_status == None:
+        st.warning("Please enter your username and password")
+
+    if authentication_status:
+        main()
+    

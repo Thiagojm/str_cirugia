@@ -1,4 +1,5 @@
 import streamlit as st
+      
 
 # Define a função calculate
 def calculate(checked_boxes, extra_values, data):
