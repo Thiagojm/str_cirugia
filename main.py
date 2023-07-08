@@ -63,26 +63,28 @@ def calculate(checked_boxes, extra_values, data):
         valor_total_hmd = valor_equipe_cirurgia + \
             valor_anestesia_renata + valor_hosp_hmd
         print_cir = " , ".join(nome_cirurgia)
-        st.write(f"Cirurgia(s) a ser(em) realizada(s): {print_cir}")
-        st.write(f"Tempo total de sala: {tempo} horas")
-        st.write(f"Dias de internamento: {diaria}")
-        st.write(f"Valor da equipe: R$ {valor_equipe_cirurgia}")
-        st.write(f"Valor da anestesia HMCC/ Unimed: R$ {valor_anestesista_foz}")
-        st.write(f"Valor da anestesia HMD: R$ {valor_anestesia_renata}")
+        message = ""
+        message = " \n".join([message, f"Cirurgia(s) a ser(em) realizada(s): {print_cir} "])    
+        message = " \n".join([message, f"Tempo total de sala: {tempo} horas "])
+        message = " \n".join([message, f"Dias de internamento: {diaria} "])
+        message = " \n".join([message, f"Valor da equipe: {valor_equipe_cirurgia} "])
+        message = " \n".join([message, f"Valor da anestesia HMCC/ Unimed: {valor_anestesista_foz} "])
+        message = " \n".join([message, f"Valor da anestesia HMD: {valor_anestesia_renata} "])
         if valor_protese != 0:
             valor_total_hmcc += valor_protese
             valor_total_unimed += valor_protese
             valor_total_hmd += valor_protese
-            st.write(f"Valor da prótese {tipo_protese}: {valor_protese}")
+            message = " \n".join([message, f"Valor da prótese {tipo_protese}: {valor_protese} "])
         if tempo_lipo > 0:
-            st.write(f"Tempo de Lipo: {tempo_lipo} horas")
-        st.write(f"Valor do hospitalar HMD: R$ {valor_hosp_hmd}")    
-        st.write(f"Valor do hospitalar Unimed: R$ {valor_hosp_unimed}")
-        st.write(f"Valor do hospitalar HMCC: R$ {valor_hosp_hmcc}")
-        st.write(f"Valor total HMD: R$ {valor_total_hmd}")
-        st.write(f"Valor total Unimed: R$ {valor_total_unimed}")
-        st.write(f"Valor total HMCC: R$ {valor_total_hmcc}")
-        st.write("\n" + "#" * 29 + "\n")
+            message = " \n".join([message, f"Tempo de Lipo: {tempo_lipo} horas "])
+        message = " \n".join([message, f"Valor do hospitalar HMD: {valor_hosp_hmd} "])    
+        message = " \n".join([message, f"Valor do hospitalar Unimed: {valor_hosp_unimed} "])
+        message = " \n".join([message, f"Valor do hospitalar HMCC: {valor_hosp_hmcc} "])
+        message = " \n".join([message, f"Valor total HMD: {valor_total_hmd} "])
+        message = " \n".join([message, f"Valor total Unimed: {valor_total_unimed} "])
+        message = " \n".join([message, f"Valor total HMCC: {valor_total_hmcc} "])
+        message = " \n".join([message, "\n" + "#" * 29 + "\n" ])
+        return message
     except Exception as e:
         st.error(f"Prencha todos os campos ou deixe em '0'.\nErro: {e}")
         print(e)
@@ -116,7 +118,14 @@ for f in files:
             data = json.load(json_file)            
             options.append(data["DATA_DA_TABELA"])
 
+# Define a class to handle session state
+class SessionState:
+    def __init__(self):
+        self.messages = []
 
+# Create or get the session state
+if "session" not in st.session_state:
+    st.session_state.session = SessionState()
 
 # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
 sorted_dates = sorted(options, key=lambda x: (x.split('/')[1], x.split('/')[0]), reverse=True)
@@ -198,6 +207,9 @@ with st.expander("Extras"):
     dias_internamento = st.text_input("Dias de internamento:", value="")
     valor_anestesia = st.text_input("Valor Anestesia:", value="0")
     valor_equipe = st.text_input("Valor Equipe:", value="0")
+
+# Conversation
+conversation = st.session_state.session.messages
     
 # Cria um botão "Calcular"
 if st.button("Calcular"):
@@ -215,4 +227,16 @@ if st.button("Calcular"):
     extra_values = [valor_ajuste, valor_protese, tempo_lipo, tempo_sala, dias_internamento, valor_anestesia, valor_equipe, tipo_protese]
     
     # Chama a função calculate quando o botão for clicado
-    calculate(checked_boxes, extra_values, data_tabela)
+    msg = calculate(checked_boxes, extra_values, data_tabela)
+    
+    conversation.append({"user": "User", "message": msg})
+    
+# Display the conversation
+message = ""
+for entry in conversation:
+    message += entry["message"]
+st.text_area(" ", value=message, height=800, max_chars=10000)
+        #st.write(f"{message}")
+
+# Update the session state
+st.session_state.session.messages = conversation
