@@ -1,4 +1,92 @@
-def valor_anestesia_renata(nome_cirurgia, anestesia_renata, renata_cons_menos):
+import streamlit as st
+
+# Define a função calculate
+def calculate(checked_boxes, extra_values, data):
+    try:
+        nome_cirurgia = checked_boxes
+        extras = extra_values
+        valor_protese = float(extras[1].replace(",", "."))
+        tempo_lipo = float(extras[2].replace(",", "."))
+        tipo_protese = extras[7]
+        if not nome_cirurgia:
+            st.error(f"Nenhuma cirurgia selecionada, tente novamente")
+            return
+        if "Lipoescultura(2,5h)" in nome_cirurgia:
+            if tempo_lipo == 0:
+                tempo_lipo = 2.5
+        elif "Lipoescultura(3h)" in nome_cirurgia:
+            if tempo_lipo == 0:
+                tempo_lipo = 3.5
+        elif "Lipoaspiração" in nome_cirurgia and tempo_lipo == 0:
+            st.warning("Escolha o tempo de lipoaspiração")
+            return
+        if "Mamoplastia com Prótese" in nome_cirurgia or "Prótese de Mama" in nome_cirurgia:
+            tipo_protese = extras[7]
+            if valor_protese == 0:
+                valor_protese = int(data["PROTESES"][tipo_protese])
+        ajuste_q = extras[0]
+        tempo, diaria = tempo_diaria(
+            nome_cirurgia, data["CIRURGIAS_EQUIPE"], data["LIPO_MENOS_1H"], tempo_lipo
+        )
+        if extras[3] != "0":
+            tempo = int(extras[3])
+        if extras[4]:
+            diaria = int(extras[4])
+        valor_equipe_cirurgia = valor_equipe(
+            nome_cirurgia, data["CIRURGIAS_EQUIPE"], ajuste_q, tempo_lipo
+        )
+        valor_anestesista_foz = valor_anestesia_foz(
+            nome_cirurgia, tempo_lipo, data["ANESTESIA_FOZ"]
+        )
+        valor_anestesia_renata = calc_anestesia_renata(
+            nome_cirurgia, data["ANESTESIA_RENATA"], data["RENATA_CONS_MENOS"])
+
+        if extras[5] != "0":
+            valor_anestesista_foz = int(extras[5])
+            valor_anestesia_renata = int(extras[5])
+
+        if extras[6] != "0":
+            valor_equipe_cirurgia = int(extras[6])
+        
+        valor_hosp_hmcc = valor_hmcc(tempo, diaria, data["HMCC"])
+        valor_hosp_unimed = valor_unimed(tempo, diaria, data["UNIMED"])
+        valor_hosp_hmd = valor_hmd(tempo, diaria, data["HMD"])
+        valor_total_hmcc = valor_equipe_cirurgia + \
+            valor_anestesista_foz + valor_hosp_hmcc
+        valor_total_unimed = (
+            valor_equipe_cirurgia + valor_anestesista_foz + valor_hosp_unimed
+        )
+        valor_total_hmd = valor_equipe_cirurgia + \
+            valor_anestesia_renata + valor_hosp_hmd
+        print_cir = " , ".join(nome_cirurgia)
+        message = ""
+        message = " \n".join([message, f"Cirurgia(s) a ser(em) realizada(s): {print_cir} "])    
+        message = " \n".join([message, f"Tempo total de sala: {tempo} horas "])
+        message = " \n".join([message, f"Dias de internamento: {diaria} "])
+        message = " \n".join([message, f"Valor da equipe: {valor_equipe_cirurgia} "])
+        message = " \n".join([message, f"Valor da anestesia HMCC/ Unimed: {valor_anestesista_foz} "])
+        message = " \n".join([message, f"Valor da anestesia HMD: {valor_anestesia_renata} "])
+        if valor_protese != 0:
+            valor_total_hmcc += valor_protese
+            valor_total_unimed += valor_protese
+            valor_total_hmd += valor_protese
+            message = " \n".join([message, f"Valor da prótese {tipo_protese}: {valor_protese} "])
+        if tempo_lipo > 0:
+            message = " \n".join([message, f"Tempo de Lipo: {tempo_lipo} horas "])
+        message = " \n".join([message, f"Valor do hospitalar HMD: {valor_hosp_hmd} "])    
+        message = " \n".join([message, f"Valor do hospitalar Unimed: {valor_hosp_unimed} "])
+        message = " \n".join([message, f"Valor do hospitalar HMCC: {valor_hosp_hmcc} "])
+        message = " \n".join([message, f"Valor total HMD: {valor_total_hmd} "])
+        message = " \n".join([message, f"Valor total Unimed: {valor_total_unimed} "])
+        message = " \n".join([message, f"Valor total HMCC: {valor_total_hmcc} "])
+        message = " \n".join([message, "\n" + "#" * 29 + "\n" ])
+        return message
+    except Exception as e:
+        st.error(f"Prencha todos os campos ou deixe em '0'.\nErro: {e}")
+        print(e)
+
+
+def calc_anestesia_renata(nome_cirurgia, anestesia_renata, renata_cons_menos):
     nome_cirurgia.sort()
     cirurgias = ', '.join(nome_cirurgia)
     valor = anestesia_renata.get(cirurgias) or 0
