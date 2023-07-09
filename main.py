@@ -4,8 +4,7 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import math
 import qmod as qm
-import yaml
-from yaml.loader import SafeLoader
+
 
 def main():
     # Define o caminho para o diretório "data"
@@ -169,16 +168,13 @@ def main():
             st.info('Selecione pelo menos uma cirurgia', icon="ℹ️")
     
 if __name__ == "__main__":
-    # Autenticação
-    with open('config.yaml') as file:
-        config = yaml.load(file, Loader=SafeLoader)
-
+    # Create an instance of the Authenticate class
     authenticator = stauth.Authenticate(
-        config['credentials'],
-        config['cookie']['name'],
-        config['cookie']['key'],
-        config['cookie']['expiry_days'],
-        config['preauthorized']
+    dict(st.secrets['credentials']),
+    st.secrets['cookie']['name'],
+    st.secrets['cookie']['key'],
+    st.secrets['cookie']['expiry_days'],
+    st.secrets['preauthorized']
 )
 
     name, authentication_status, username = authenticator.login("Login", "main")
