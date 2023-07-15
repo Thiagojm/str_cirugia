@@ -66,7 +66,7 @@ def calculate(checked_boxes, extra_values, data):
         message = " \n".join([message, f"Dias de internamento: {diaria} "])
         message = " \n".join([message, f"Valor da equipe: {valor_equipe_cirurgia} "])
         message = " \n".join([message, f"Valor da anestesia HMCC/ Unimed: {valor_anestesista_foz} "])
-        message = " \n".join([message, f"Valor da anestesia HMD: {valor_anestesia_renata} "])
+        # message = " \n".join([message, f"Valor da anestesia HMD: {valor_anestesia_renata} "])
         if valor_protese != 0:
             valor_total_hmcc += valor_protese
             valor_total_unimed += valor_protese
@@ -74,10 +74,10 @@ def calculate(checked_boxes, extra_values, data):
             message = " \n".join([message, f"Valor da prótese {tipo_protese}: {valor_protese} "])
         if tempo_lipo > 0:
             message = " \n".join([message, f"Tempo de Lipo: {tempo_lipo} horas "])
-        message = " \n".join([message, f"Valor do hospitalar HMD: {valor_hosp_hmd} "])    
+        # message = " \n".join([message, f"Valor do hospitalar HMD: {valor_hosp_hmd} "])    
         message = " \n".join([message, f"Valor do hospitalar Unimed: {valor_hosp_unimed} "])
         message = " \n".join([message, f"Valor do hospitalar HMCC: {valor_hosp_hmcc} "])
-        message = " \n".join([message, f"Valor total HMD: {valor_total_hmd} "])
+        # message = " \n".join([message, f"Valor total HMD: {valor_total_hmd} "])
         message = " \n".join([message, f"Valor total Unimed: {valor_total_unimed} "])
         message = " \n".join([message, f"Valor total HMCC: {valor_total_hmcc} "])
         message = " \n".join([message, "\n" + "#" * 29 + "\n" ])
