@@ -1,3 +1,4 @@
 secrets.toml
 !.gitignore
 !.secrets.toml.default
+*.json

@@ -1,5 +1,33 @@
 import streamlit as st
+import json
+from base64 import b64decode
+import hashlib
+from Crypto.Cipher import AES
       
+
+def load_and_decrypt(filename, password):
+    with open(filename, 'r') as f:
+        enc_data = json.load(f)
+    return decrypt(enc_data, password)
+
+def decrypt(enc_dict, password):
+    # Convert password to 32 byte AES key
+    key = hashlib.sha256(password.encode()).digest()
+
+    # Create a new EAX cipher
+    cipher = AES.new(key, AES.MODE_EAX, nonce=b64decode(enc_dict['nonce']))
+
+    # Decrypt the data
+    decrypted = cipher.decrypt_and_verify(b64decode(enc_dict['ciphertext']),
+                                          b64decode(enc_dict['tag']))
+
+    # Convert bytes to string
+    decrypted = decrypted.decode('utf-8')
+
+    # Load JSON data from string
+    data = json.loads(decrypted)
+
+    return data
 
 # Define a função calculate
 def calculate(checked_boxes, extra_values, data):

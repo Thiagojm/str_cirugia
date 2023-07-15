@@ -32,9 +32,8 @@ def main():
             file_path = os.path.join(data_dir, f)
             
             # Abre o arquivo e carrega o conteúdo como um dicionário
-            with open(file_path, "r", encoding='utf-8') as json_file:
-                data = json.load(json_file)            
-                options.append(data["DATA_DA_TABELA"])
+            decrypted = qm.load_and_decrypt(file_path, table_pass)                              
+            options.append(decrypted["DATA_DA_TABELA"])
 
     # Define a class to handle session state
     class SessionState:
@@ -52,8 +51,8 @@ def main():
 
     # Carrega o arquivo .json correspondente à tabela selecionada
     if selected_tabela:
-        with open(os.path.join(data_dir, json_files[options.index(selected_tabela)]), "r", encoding='utf-8') as json_file:
-            data_tabela = json.load(json_file)
+        data_tabela = qm.load_and_decrypt(os.path.join(data_dir, json_files[options.index(selected_tabela)]), table_pass)
+        
             
 
     ####### Pagina principal #######
@@ -176,7 +175,8 @@ if __name__ == "__main__":
     st.secrets['cookie']['expiry_days'],
     st.secrets['preauthorized']
 )
-
+    table_pass = st.secrets['table_pass']["pass"]
+    
     name, authentication_status, username = authenticator.login("Login", "main")
     if authentication_status == False:
         st.error("Username/password is incorrect")
