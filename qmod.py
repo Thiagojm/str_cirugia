@@ -39,7 +39,7 @@ def calculate(checked_boxes, extra_values, data):
         tipo_protese = extras[7]
         if not nome_cirurgia:
             st.error(f"Nenhuma cirurgia selecionada, tente novamente")
-            return
+            return ""
         if "Lipoescultura(2,5h)" in nome_cirurgia:
             if tempo_lipo == 0:
                 tempo_lipo = 2.5
@@ -48,7 +48,7 @@ def calculate(checked_boxes, extra_values, data):
                 tempo_lipo = 3.5
         elif "Lipoaspiração" in nome_cirurgia and tempo_lipo == 0:
             st.warning("Escolha o tempo de lipoaspiração")
-            return
+            return ""
         if "Mamoplastia com Prótese" in nome_cirurgia or "Prótese de Mama" in nome_cirurgia:
             tipo_protese = extras[7]
             if valor_protese == 0:
