@@ -8,8 +8,8 @@ Description=Streamlit Cirurgia
 After=network.target
 
 [Service]
-ExecStart=/home/ubuntu/miniconda/bin/streamlit run /home/ubuntu/str-cirurgia/Home.py
-WorkingDirectory=/home/ubuntu/str-cirurgia
+ExecStart=/home/ubuntu/miniconda/bin/streamlit run /home/ubuntu/str_cirurgia/Home.py
+WorkingDirectory=/home/ubuntu/str_cirurgia
 User=ubuntu
 Group=ubuntu
 Restart=always
@@ -24,22 +24,22 @@ sudo systemctl start str-cirurgia.service
 
 -----------------
 To enable:
-sudo systemctl enable streamlit-app.service
+sudo systemctl enable str-cirurgia.service
 
 To start:
-sudo systemctl start streamlit-app.service
+sudo systemctl start str-cirurgia.service
 
 To stop:
-sudo systemctl stop streamlit-app.service
+sudo systemctl stop str-cirurgia.service
 
 To status:
-sudo systemctl status streamlit-app.service
+sudo systemctl status str-cirurgia.service
 
 To reload:
 sudo systemctl daemon-reload
 
 To delete:
-sudo systemctl stop streamlit-app.service
-sudo systemctl disable streamlit-app.service
-sudo rm /etc/systemd/system/streamlit-app.service
+sudo systemctl stop str-cirurgia.service
+sudo systemctl disable str-cirurgia.servicee
+sudo rm /etc/systemd/system/str-cirurgia.service
 sudo systemctl daemon-reload
