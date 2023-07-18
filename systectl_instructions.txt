@@ -1,0 +1,45 @@
+To create this file:
+
+sudo nano /etc/systemd/system/str-cirurgia.service
+-----------
+
+[Unit]
+Description=Streamlit Cirurgia
+After=network.target
+
+[Service]
+ExecStart=/home/ubuntu/miniconda/bin/streamlit run /home/ubuntu/str-cirurgia/Home.py
+WorkingDirectory=/home/ubuntu/str-cirurgia
+User=ubuntu
+Group=ubuntu
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+---------------
+sudo systemctl daemon-reload
+sudo systemctl enable str-cirurgia.service
+sudo systemctl start str-cirurgia.service
+
+-----------------
+To enable:
+sudo systemctl enable streamlit-app.service
+
+To start:
+sudo systemctl start streamlit-app.service
+
+To stop:
+sudo systemctl stop streamlit-app.service
+
+To status:
+sudo systemctl status streamlit-app.service
+
+To reload:
+sudo systemctl daemon-reload
+
+To delete:
+sudo systemctl stop streamlit-app.service
+sudo systemctl disable streamlit-app.service
+sudo rm /etc/systemd/system/streamlit-app.service
+sudo systemctl daemon-reload
