@@ -2,6 +2,7 @@ import streamlit as st
 from fpdf import FPDF
 import base64
 
+
 class CustomPDF(FPDF):
     def header(self):
         self.set_font("Arial", 'B', size = 15)
