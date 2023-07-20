@@ -92,7 +92,21 @@ def main():
     st.divider()
 
     st.header('Exames Cardiológicos')
-    # Here you can add the elements you want to show under "Exames Cardiológicos"
+    
+    # Create two columns
+    col4, col5 = st.columns(2)
+
+    # Read the file and create a checkbox for each line, alternating between the two columns
+    cardio_selections = {}  # Dictionary to store the selections
+    with open("scr/cardio/cardio.txt", "r", encoding="UTF-8") as file:
+        lines = file.readlines()
+        for i in range(len(lines)):
+            line = lines[i].strip()  # Remove the newline character at the end of the line
+            # Alternate between columns based on the index of the line
+            if i % 2 == 0:
+                imagem_selections[line] = col4.checkbox(line, key=line + "_cardio")
+            else:
+                imagem_selections[line] = col5.checkbox(line, key=line + "_cardio")
 
     st.header('Avaliação de Especialista')
     # Here you can add the elements you want to show under "Avaliação de Especialista"
