@@ -39,9 +39,10 @@ def show_pdf(file_path):
 
 def main():
     st.title('Emissão de Documentos Médicos')
+    receitas_folder = "scr/receitas"
 
-    # list all .txt files in the 'rec_temp' directory
-    document_type = [os.path.splitext(f)[0] for f in os.listdir('rec_temp') if f.endswith('.txt')]
+    # list all .txt files in the 'src/receitas' directory
+    document_type = [os.path.splitext(f)[0] for f in os.listdir(receitas_folder) if f.endswith('.txt')]
     
     selected_file  = st.sidebar.selectbox(
         'Que tipo de documento você gostaria de criar?',
@@ -51,7 +52,7 @@ def main():
     # add the .txt extension back onto the selected file name
     selected_file_with_ext = selected_file + '.txt'
     # read the selected file and put its contents into the 'document_text' variable
-    with open(os.path.join('rec_temp', selected_file_with_ext), 'r') as file:
+    with open(os.path.join(receitas_folder, selected_file_with_ext), 'r') as file:
         document_text = file.read()
         
     patient_name = st.text_input('Nome do Paciente')

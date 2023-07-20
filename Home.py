@@ -7,7 +7,7 @@ import qmod as qm
 
 def main():
     # Define o caminho para o diretório "data"
-    data_dir = "data"
+    data_dir = "scr/tabelas"
 
     # Lista os arquivos no diretório "data"
     files = os.listdir(data_dir)
