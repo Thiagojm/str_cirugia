@@ -3,6 +3,7 @@ from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 import base64
 import os
+import streamlit_authenticator as stauth
 
 
 class CustomPDF(FPDF):
@@ -20,9 +21,10 @@ class CustomPDF(FPDF):
 
 def save_pdf(filename, patient_name, document_text, document_date=None, include_date=False):
     pdf = CustomPDF(orientation="P", unit="mm", format="A4")
+    pdf.set_auto_page_break(auto=True, margin=40)
     pdf.add_page()
     pdf.set_font("Helvetica", size = 15)
-    pdf.cell(0, 20, txt = f"RECEITA MÉDICA", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
+    pdf.cell(0, 20, txt = "RECEITA MÉDICA", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
     pdf.cell(0, 20, txt = f"Nome: {patient_name}", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'L')
     pdf.ln(10)
     pdf.multi_cell(0, 10, txt = document_text)
@@ -38,6 +40,10 @@ def show_pdf(file_path):
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 def main():
+
+    # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
+    authenticator.logout("Logout", "sidebar")
+    
     st.title('Emissão de Documentos Médicos')
     receitas_folder = "scr/receitas"
 
@@ -66,4 +72,22 @@ def main():
         show_pdf(filename)
 
 if __name__ == "__main__":
-    main()
+     # Create an instance of the Authenticate class
+    authenticator = stauth.Authenticate(
+    dict(st.secrets['credentials']),
+    st.secrets['cookie']['name'],
+    st.secrets['cookie']['key'],
+    st.secrets['cookie']['expiry_days'],
+    st.secrets['preauthorized']
+)
+    table_pass = st.secrets['table_pass']["pass"]
+    
+    name, authentication_status, username = authenticator.login("Login", "main")
+    if authentication_status == False:
+        st.error("Username/password is incorrect")
+
+    if authentication_status == None:
+        st.warning("Please enter your username and password")
+
+    if authentication_status:
+        main()

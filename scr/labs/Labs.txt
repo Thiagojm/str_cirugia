@@ -20,3 +20,7 @@ GH, IGF-1
 Cortisol 
 SDHEA, SHBG
 DHEA
+Colesterol Total e Frações
+Triglicerídeos
+FA e GGT
+DHL

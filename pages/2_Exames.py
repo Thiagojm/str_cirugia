@@ -3,6 +3,7 @@ from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 import base64
 import os
+import streamlit_authenticator as stauth
 
 
 class CustomPDF(FPDF):
@@ -39,6 +40,9 @@ def show_pdf(file_path):
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 def main():
+    # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
+    authenticator.logout("Logout", "sidebar")
+    
     st.title('Pré Operatório')
     
     patient_name = st.text_input('Nome do Paciente')
@@ -131,7 +135,23 @@ def main():
         show_pdf(filename)
 
 
-
-
 if __name__ == "__main__":
-    main()
+     # Create an instance of the Authenticate class
+    authenticator = stauth.Authenticate(
+    dict(st.secrets['credentials']),
+    st.secrets['cookie']['name'],
+    st.secrets['cookie']['key'],
+    st.secrets['cookie']['expiry_days'],
+    st.secrets['preauthorized']
+)
+    table_pass = st.secrets['table_pass']["pass"]
+    
+    name, authentication_status, username = authenticator.login("Login", "main")
+    if authentication_status == False:
+        st.error("Username/password is incorrect")
+
+    if authentication_status == None:
+        st.warning("Please enter your username and password")
+
+    if authentication_status:
+        main()
