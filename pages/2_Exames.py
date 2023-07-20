@@ -20,6 +20,7 @@ class CustomPDF(FPDF):
         
 
 def save_pdf(pdf, patient_name, document_text, doc_type, document_date=None, include_date=False):
+    pdf.set_auto_page_break(auto=True, margin=40)
     pdf.add_page()
     pdf.set_font("Helvetica", size = 15)
     pdf.cell(0, 20, txt = doc_type, new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
