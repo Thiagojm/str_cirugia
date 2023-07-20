@@ -131,11 +131,10 @@ def main():
     obs_aval = st.text_area("Observações", "Solicito liberação pré-operatória.")
     st.divider()
     
-    
-    
     document_date = st.date_input('Data do Documento', value=None, )
     include_date = st.checkbox('Incluir data no documento')
     
+    st.divider()
     if st.button('Criar Documento'):
         # Generate document text for Exames Laboratoriais
         document_text_labs = ""
