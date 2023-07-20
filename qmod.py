@@ -4,6 +4,11 @@ from base64 import b64decode
 import hashlib
 from Crypto.Cipher import AES
       
+# Define a class to handle session state
+class SessionState:
+    def __init__(self):
+        self.messages = []
+
 
 def load_and_decrypt(filename, password):
     with open(filename, 'r') as f:

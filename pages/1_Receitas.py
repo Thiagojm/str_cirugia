@@ -4,6 +4,7 @@ from fpdf.enums import XPos, YPos
 import base64
 import os
 import streamlit_authenticator as stauth
+import qmod as qm
 
 
 class CustomPDF(FPDF):
@@ -40,7 +41,11 @@ def show_pdf(file_path):
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 def main():
-
+     # Create or get the session state
+    if "session" not in st.session_state:
+        st.session_state.session = qm.SessionState()
+    
+    
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
     

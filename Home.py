@@ -6,6 +6,10 @@ import qmod as qm
 
 
 def main():
+    # Create or get the session state
+    if "session" not in st.session_state:
+        st.session_state.session = qm.SessionState()
+        
     # Define o caminho para o diretório "data"
     data_dir = "scr/tabelas"
 
@@ -34,14 +38,6 @@ def main():
             decrypted = qm.load_and_decrypt(file_path, table_pass)                              
             options.append(decrypted["DATA_DA_TABELA"])
 
-    # Define a class to handle session state
-    class SessionState:
-        def __init__(self):
-            self.messages = []
-
-    # Create or get the session state
-    if "session" not in st.session_state:
-        st.session_state.session = SessionState()
 
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")

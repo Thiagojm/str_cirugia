@@ -2,7 +2,7 @@ import streamlit as st
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 import base64
-import os
+import qmod as qm
 import streamlit_authenticator as stauth
 
 
@@ -40,6 +40,11 @@ def show_pdf(file_path):
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 def main():
+    # Create or get the session state
+    if "session" not in st.session_state:
+        st.session_state.session = qm.SessionState()
+    
+    
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
     
@@ -104,13 +109,30 @@ def main():
             line = lines[i].strip()  # Remove the newline character at the end of the line
             # Alternate between columns based on the index of the line
             if i % 2 == 0:
-                imagem_selections[line] = col4.checkbox(line, key=line + "_cardio")
+                cardio_selections[line] = col4.checkbox(line, key=line + "_cardio")
             else:
-                imagem_selections[line] = col5.checkbox(line, key=line + "_cardio")
+                cardio_selections[line] = col5.checkbox(line, key=line + "_cardio")
 
+    st.divider()
     st.header('Avaliação de Especialista')
     # Here you can add the elements you want to show under "Avaliação de Especialista"
+    # Read the file and create a checkbox for each line, alternating between the two columns
+    ind_aval = st.text_input("Indicação", "")
+    aval_selections = {}  # Dictionary to store the selections
+    with open("scr/aval/aval.txt", "r", encoding="UTF-8") as file:
+        lines = file.readlines()
+        for i in range(len(lines)):
+            line = lines[i].strip()  # Remove the newline character at the end of the line
+            # Alternate between columns based on the index of the line
+            aval_selections[line] = st.checkbox(line)
+            
 
+    # Add a text area for additional notes or input
+    obs_aval = st.text_area("Observações", "Solicito liberação pré-operatória.")
+    st.divider()
+    
+    
+    
     document_date = st.date_input('Data do Documento', value=None, )
     include_date = st.checkbox('Incluir data no documento')
     
@@ -129,18 +151,42 @@ def main():
                 document_text_imagem += "- " + item + "\n"
         document_text_imagem += outros_imagem
 
+        # Generate document text for Exames de Imagem
+        document_text_cardio = ""
+        for item, selected in cardio_selections.items():
+            if selected:
+                document_text_cardio += "- " + item + "\n"
+
+        # Generate document text for Avaliação de Especialista
+        document_text_aval = f"INDICAÇÃO: {ind_aval}\n\nESPECIALIDADE:\n"
+        for item, selected in aval_selections.items():
+            if selected:
+                document_text_aval += "- " + item + "\n"
+        document_text_aval += f"\nOBSERVAÇÃO:\n{obs_aval}"
+
+        
         # Replace these with the actual values you want to use
         filename = "my_pdf.pdf"
         doc_type_labs = "Exames Laboratoriais"
         doc_type_imagem = "Exames de Imagem"
+        doc_type_cardio = "Exames Cardiológicos"
+        doc_type_aval = "Avaliação de Especialista"
 
         # Create FPDF object
         pdf = CustomPDF(orientation="P", unit="mm", format="A4")
 
         # Save PDF for Exames Laboratoriais
-        save_pdf(pdf, patient_name, document_text_labs, doc_type_labs, document_date, include_date)
+        if document_text_labs:
+            save_pdf(pdf, patient_name, document_text_labs, doc_type_labs, document_date, include_date)
         # Save PDF for Exames de Imagem
-        save_pdf(pdf, patient_name, document_text_imagem, doc_type_imagem, document_date, include_date)
+        if document_text_imagem:
+            save_pdf(pdf, patient_name, document_text_imagem, doc_type_imagem, document_date, include_date)
+        # Save PDF for Exames de Cardio
+        if document_text_cardio:
+            save_pdf(pdf, patient_name, document_text_cardio, doc_type_cardio, document_date, include_date)
+        # Save PDF for Aval
+        if document_text_aval:
+            save_pdf(pdf, patient_name, document_text_aval, doc_type_aval, document_date, include_date)
 
         # Output the PDF
         pdf.output(filename)
