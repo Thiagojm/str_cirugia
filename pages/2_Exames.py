@@ -154,13 +154,15 @@ def main():
                 document_text_cardio += "- " + item + "\n"
 
         # Generate document text for Avaliação de Especialista
-        document_text_aval = f"INDICAÇÃO: {ind_aval}\n\nESPECIALIDADE:\n"
-        for item, selected in aval_selections.items():
-            if selected:
-                document_text_aval += "- " + item + "\n"
-        if outro_esp:
-            document_text_aval += f"- {outro_esp}\n"
-        document_text_aval += f"\nOBSERVAÇÃO:\n{obs_aval}"
+        document_text_aval = ""
+        if any(aval_selections.values()) or outro_esp:
+            document_text_aval = f"INDICAÇÃO: {ind_aval}\n\nESPECIALIDADE:\n"
+            for item, selected in aval_selections.items():
+                if selected:
+                    document_text_aval += "- " + item + "\n"
+            if outro_esp:
+                document_text_aval += f"- {outro_esp}\n"
+            document_text_aval += f"\nOBSERVAÇÃO:\n{obs_aval}"
 
         
         # Replace these with the actual values you want to use
