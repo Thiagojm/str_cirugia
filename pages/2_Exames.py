@@ -129,7 +129,7 @@ def main():
             # Alternate between columns based on the index of the line
             aval_selections[line] = st.checkbox(line)
             
-
+    outro_esp = st.text_input("Outro", "")
     # Add a text area for additional notes or input
     obs_aval = st.text_area("Observações", "Solicito liberação pré-operatória.")
     st.divider()
@@ -165,6 +165,7 @@ def main():
         for item, selected in aval_selections.items():
             if selected:
                 document_text_aval += "- " + item + "\n"
+        document_text_aval += f"- {outro_esp}\n"
         document_text_aval += f"\nOBSERVAÇÃO:\n{obs_aval}"
 
         
