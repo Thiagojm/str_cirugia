@@ -43,7 +43,9 @@ def main():
      # Create or get the session state
     if "session" not in st.session_state:
         st.session_state.session = qm.SessionState()
-    
+        
+    if 'patient_name' not in st.session_state:
+        st.session_state['patient_name'] = ''  
     
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
@@ -65,7 +67,8 @@ def main():
     with open(os.path.join(receitas_folder, selected_file_with_ext), 'r', encoding="UTF-8") as file:
         document_text = file.read()
         
-    patient_name = st.text_input('Nome do Paciente')
+    patient_name = st.text_input('Nome do Paciente', value=st.session_state.patient_name, key="pacient_name")
+    st.session_state.patient_name = patient_name
     doc_type = st.text_input('Tipo de Documento', value="")
     document_text = st.text_area('Texto do Documento', height=300, value=document_text)
     document_date = st.date_input('Data do Documento', value=None)

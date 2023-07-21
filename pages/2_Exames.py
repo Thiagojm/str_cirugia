@@ -44,13 +44,16 @@ def main():
     if "session" not in st.session_state:
         st.session_state.session = qm.SessionState()
     
+    if 'patient_name' not in st.session_state:
+        st.session_state['patient_name'] = ''    
     
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
     
     st.title('Pré Operatório')
     
-    patient_name = st.text_input('Nome do Paciente')
+    patient_name = st.text_input('Nome do Paciente', value=st.session_state.patient_name, key="pacient_name")
+    st.session_state.patient_name = patient_name
     st.divider()
     
     st.header('Exames Laboratoriais')
