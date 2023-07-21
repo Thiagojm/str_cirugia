@@ -135,7 +135,8 @@ def main():
     include_date = st.checkbox('Incluir data no documento')
     
     st.divider()
-    if st.button('Criar Documento'):
+    colb1, colb2 = st.columns(2)
+    if colb1.button('Criar Documento'):
         # Generate document text for Exames Laboratoriais
         document_text_labs = ""
         for item, selected in selections.items():
@@ -193,6 +194,9 @@ def main():
         # Show the PDF
         show_pdf(filename)
 
+    # Download the PDF
+    with open('my_pdf.pdf', "rb") as f:
+        colb2.download_button('Download PDF', f, file_name="Documento.pdf") 
 
 if __name__ == "__main__":
      # Create an instance of the Authenticate class

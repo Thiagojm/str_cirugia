@@ -71,11 +71,16 @@ def main():
     document_date = st.date_input('Data do Documento', value=None)
     include_date = st.checkbox('Incluir data no documento')
 
-    if st.button('Criar Documento'):
+    colb1, colb2 = st.columns(2)
+    if colb1.button('Criar Documento'):
         filename = "my_pdf.pdf"
         save_pdf(filename, patient_name, document_text, document_date, include_date)
         show_pdf(filename)
 
+    # Download the PDF
+    with open('my_pdf.pdf', "rb") as f:
+        colb2.download_button('Download PDF', f, file_name="Documento.pdf") 
+    
 if __name__ == "__main__":
      # Create an instance of the Authenticate class
     authenticator = stauth.Authenticate(
