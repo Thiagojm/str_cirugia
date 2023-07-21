@@ -1,7 +1,6 @@
 import streamlit as st
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
-import base64
 import os
 import streamlit_authenticator as stauth
 import qmod as qm
@@ -32,11 +31,6 @@ def save_pdf(pdf, patient_name, document_text, doc_type, document_date=None, inc
         pdf.ln(30)
         pdf.cell(0, 10, txt = f"{document_date.strftime('%d/%m/%Y')}", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
 
-def show_pdf(file_path):
-    with open(file_path,"rb") as f:
-        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
-    st.markdown(pdf_display, unsafe_allow_html=True)
 
 def main():
      # Create or get the session state
@@ -82,7 +76,7 @@ def main():
         pdf.output(filename)
 
         # Show the PDF
-        show_pdf(filename)
+        qm.show_pdf(filename)
 
     # Download the PDF
     with open('my_pdf.pdf', "rb") as f:

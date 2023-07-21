@@ -1,3 +1,4 @@
+import base64
 import streamlit as st
 import json
 from base64 import b64decode
@@ -8,6 +9,12 @@ from Crypto.Cipher import AES
 class SessionState:
     def __init__(self):
         self.messages = []
+
+def show_pdf(file_path):
+    with open(file_path,"rb") as f:
+        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="400" height="500" type="application/pdf"></iframe>'
+    st.markdown(pdf_display, unsafe_allow_html=True)
 
 
 def load_and_decrypt(filename, password):
