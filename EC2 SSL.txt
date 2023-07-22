@@ -15,6 +15,16 @@ upstream ws-backend {
   }
 
 server {
+    # listen on port 80 (http)
+    listen 80;
+    server_name bmf-cpl.site;
+    location / {
+        # redirect any requests to the same URL but on https
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
     listen 443 ssl; # this port will listen, if you don't have ssl, remove ssl word
     server_name bmf-cpl.site;
 
