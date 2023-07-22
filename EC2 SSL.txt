@@ -1,0 +1,55 @@
+# Make certs inside str_cirurgia folder
+mkdir certs
+openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
+  -keyout certs/key.pem -out certs/cert.pem
+
+# Config nginx
+sudo nano /etc/nginx/sites-available/streamlit
+
+# Put this in the file and save it
+upstream ws-backend {
+  
+    server 172.31.16.142:8501; # this should be your application running in ip and port
+  
+  }
+
+server {
+    listen 443 ssl; # this port will listen, if you don't have ssl, remove ssl word
+    server_name 3.133.91.127;
+
+    ssl_certificate     /home/ubuntu/str_cirurgia/certs/cert.pem; # comment it, if you don't have ssl_certificate (i.e .crt file)
+    ssl_certificate_key /home/ubuntu/str_cirurgia/certs/key.pem; # comment it, if you don't have ssl_certificate_key (i.e .key file)
+    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2; # comment it, if you don't have ssl
+    ssl_ciphers         HIGH:!aNULL:!MD5; # comment it, if you don't have ssl
+    client_max_body_size 100M; # It allows files below 100Mb, change it based on your use
+
+    location / {
+      
+      proxy_pass http://ws-backend;
+      
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+    }
+  }
+
+sudo ln -s /etc/nginx/sites-available/streamlit /etc/nginx/sites-enabled
+
+sudo service nginx reload
+
+# Allow port 443 and 80 in AWS
+
+sudo nano /home/ubuntu/str_cirurgia/.streamlit/config.toml
+
+# Put this in the file and save it
+[server]
+port=8501 # change port number. By default streamlit uses 8501 port
+headless=true # This will eliminate automatically open browser
+# enableCORS=false 
+# enableXsrfProtection=false 
+# enableWebsocketCompression=false[browser] # This ip and port will show in command prompt
+serverAddress = "localhost" # Put your Local IP or Domain Name
+serverPort = 8501  
