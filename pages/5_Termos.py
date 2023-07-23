@@ -74,7 +74,7 @@ def main():
     patient_name = st.text_input('Nome do Paciente', value=st.session_state.patient_name, key="pacient_name")
     st.session_state.patient_name = patient_name
     cirurgia_name = st.text_input('Tipo de Cirurgia', value=st.session_state.cirurgia_name, key="cirurgia_name")
-    observacao = st.text_input('Observações', value="")
+    observacao = st.text_area('Observações', value="")
     document_text = st.text_area('Texto do Documento', height=300, value=document_text)
     document_date = st.date_input('Data do Documento', value=None)
     include_date = st.checkbox('Incluir data no documento')
