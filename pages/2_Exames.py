@@ -39,6 +39,9 @@ def main():
     
     if 'patient_name' not in st.session_state:
         st.session_state['patient_name'] = ''    
+
+    if 'cirurgia_name' not in st.session_state:
+        st.session_state['cirurgia_name'] = ''  
     
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
@@ -113,7 +116,7 @@ def main():
     st.header('Avaliação de Especialista')
     # Here you can add the elements you want to show under "Avaliação de Especialista"
     # Read the file and create a checkbox for each line, alternating between the two columns
-    ind_aval = st.text_input("Indicação", "")
+    cirurgia_name = st.text_input('Indicação', value=st.session_state.cirurgia_name, key="cirurgia_name")
     aval_selections = {}  # Dictionary to store the selections
     with open("scr/aval/aval.txt", "r", encoding="UTF-8") as file:
         lines = file.readlines()
@@ -156,7 +159,7 @@ def main():
         # Generate document text for Avaliação de Especialista
         document_text_aval = ""
         if any(aval_selections.values()) or outro_esp:
-            document_text_aval = f"INDICAÇÃO: {ind_aval}\n\nESPECIALIDADE:\n"
+            document_text_aval = f"INDICAÇÃO: {cirurgia_name}\n\nESPECIALIDADE:\n"
             for item, selected in aval_selections.items():
                 if selected:
                     document_text_aval += "- " + item + "\n"

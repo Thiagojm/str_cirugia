@@ -7,20 +7,14 @@ Vitamina D
 Beta-HCG
 Proteínas Totais de Frações
 Hemoglobina Glicada
-TSH, T4L
-LH, FSH
-TGO, TGP
-Androstenediona
-Estradiol  
-Prolactina
-ACTH
-Bilirrubinas Totais e Frações   
-Testosterona total e livre
-GH, IGF-1
-Cortisol 
-SDHEA, SHBG
-DHEA
 Colesterol Total e Frações
 Triglicerídeos
-FA e GGT
-DHL
+TSH, T4L
+LH, FSH
+Estradiol  
+Prolactina
+Bilirrubinas Totais e Frações
+TGO, TGP
+FA e GGT   
+Testosterona Total e Livre
+SHBG
