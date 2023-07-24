@@ -10,18 +10,18 @@ import template as tp
 class CustomPDF(FPDF):
     def header(self):
         self.set_font("Helvetica", 'BI' , size = 14)
-        self.cell(0, 10, txt = "Dr. Thiago Jung Mendaçolli", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
-        self.cell(0, 10, txt = "CIRURGIA PLÁSTICA", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
-        self.cell(0, 6, txt = ("_" * 60), new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
+        self.cell(0, 10, txt = "Dr. Thiago Jung Mendaçolli - Cirurgia Plástica", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
+        self.cell(0, 8, txt = "TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
+        self.cell(0, 8, txt = ("_" * 60), new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
 
     def footer(self):
-        self.set_y(-40)
+        self.set_y(-30)
         self.set_font("Helvetica", size = 8)
         self.cell(0, 6, txt = ("_" * 110), new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
         self.multi_cell(0, 6, txt = "Clínica Bioethos: Rua Padre Montoya, 300 - Centro - CEP 85851-080, Foz do Iguaçu - PR\nTel: (45) 3028-1282 - Whats: (45) 98805-0334 www.drthiagocirurgiaplastica.com.br", align = 'C')
 
 def save_pdf(pdf, patient_name, document_text, cirurgia_name, observacao, document_date=None, include_date=False):
-    pdf.set_auto_page_break(auto=True, margin=35)
+    pdf.set_auto_page_break(auto=True, margin=25)
     pdf.add_page()
     pdf.set_font("Helvetica", size = 10)   
     if document_text:
@@ -34,7 +34,7 @@ def save_pdf(pdf, patient_name, document_text, cirurgia_name, observacao, docume
         pdf.add_page()
     termo_result = tp.change_template(patient_name, cirurgia_name)
     pdf.ln(5)
-    pdf.multi_cell(0, 4.5, txt = termo_result)
+    pdf.multi_cell(0, 5, txt = termo_result)
     if include_date and document_date is not None:
         pdf.ln(30)
         pdf.cell(0, 10, txt = f"{document_date.strftime('%d/%m/%Y')}", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
@@ -58,12 +58,13 @@ def main():
     receitas_folder = "scr/termos"
 
     # list all .txt files in the 'src/receitas' directory
-    document_type = [os.path.splitext(f)[0] for f in os.listdir(receitas_folder) if f.endswith('.txt')]
-    
+    document_type = sorted([os.path.splitext(f)[0] for f in os.listdir(receitas_folder) if f.endswith('.txt')])
+
     selected_file  = st.sidebar.selectbox(
         'Que tipo de documento você gostaria de criar?',
         document_type
     )
+
     
     # add the .txt extension back onto the selected file name
     selected_file_with_ext = selected_file + '.txt'

@@ -49,7 +49,7 @@ def main():
     receitas_folder = "scr/receitas"
 
     # list all .txt files in the 'src/receitas' directory
-    document_type = [os.path.splitext(f)[0] for f in os.listdir(receitas_folder) if f.endswith('.txt')]
+    document_type = sorted([os.path.splitext(f)[0] for f in os.listdir(receitas_folder) if f.endswith('.txt')])
     
     selected_file  = st.sidebar.selectbox(
         'Que tipo de documento você gostaria de criar?',
