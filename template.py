@@ -10,7 +10,7 @@ def change_template(patient_name, cirurgia_name):
     'patient_name': patient_name,
     'cirurgia_name': cirurgia_name
     }
-    with open('scr/outros/Termo Geral.txt', 'r', encoding="UTF-8") as f:
+    with open('src/outros/Termo Geral.txt', 'r', encoding="UTF-8") as f:
         src = MyTemplate(f.read())    
         termo_result = src.substitute(d)
         

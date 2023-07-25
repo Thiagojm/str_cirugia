@@ -11,7 +11,7 @@ def main():
         st.session_state.session = qm.SessionState()
         
     # Define o caminho para o diretório "data"
-    data_dir = "scr/tabelas"
+    data_dir = "src/tabelas"
 
     # Lista os arquivos no diretório "data"
     files = os.listdir(data_dir)

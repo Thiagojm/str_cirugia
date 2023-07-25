@@ -44,7 +44,7 @@ def main():
     authenticator.logout("Logout", "sidebar")
     
     st.title('Atestados e Declarações')
-    receitas_folder = "scr/atestados"
+    receitas_folder = "src/atestados"
 
     # list all .txt files in the 'src/receitas' directory
     document_type = [os.path.splitext(f)[0] for f in os.listdir(receitas_folder) if f.endswith('.txt')]

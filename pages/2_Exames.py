@@ -67,7 +67,7 @@ def main():
 
     # Read the file and create a checkbox for each line, alternating between the two columns
     selections = {}  # Dictionary to store the selections
-    with open("scr/labs/Labs.txt", "r", encoding="UTF-8") as file:
+    with open("src/labs/Labs.txt", "r", encoding="UTF-8") as file:
         lines = file.readlines()
         for i in range(len(lines)):
             line = lines[i].strip()  # Remove the newline character at the end of the line
@@ -89,7 +89,7 @@ def main():
 
     # Read the file and create a checkbox for each line, alternating between the two columns
     imagem_selections = {}  # Dictionary to store the selections
-    with open("scr/imagem/imagem.txt", "r", encoding="UTF-8") as file:
+    with open("src/imagem/imagem.txt", "r", encoding="UTF-8") as file:
         lines = file.readlines()
         for i in range(len(lines)):
             line = lines[i].strip()  # Remove the newline character at the end of the line
@@ -110,7 +110,7 @@ def main():
 
     # Read the file and create a checkbox for each line, alternating between the two columns
     cardio_selections = {}  # Dictionary to store the selections
-    with open("scr/cardio/cardio.txt", "r", encoding="UTF-8") as file:
+    with open("src/cardio/cardio.txt", "r", encoding="UTF-8") as file:
         lines = file.readlines()
         for i in range(len(lines)):
             line = lines[i].strip()  # Remove the newline character at the end of the line
@@ -126,7 +126,7 @@ def main():
     # Read the file and create a checkbox for each line, alternating between the two columns
     cirurgia_name = st.text_input('Indicação', value=st.session_state.cirurgia_name, key="cirurgia_name")
     aval_selections = {}  # Dictionary to store the selections
-    with open("scr/aval/aval.txt", "r", encoding="UTF-8") as file:
+    with open("src/aval/aval.txt", "r", encoding="UTF-8") as file:
         lines = file.readlines()
         for i in range(len(lines)):
             line = lines[i].strip()  # Remove the newline character at the end of the line
