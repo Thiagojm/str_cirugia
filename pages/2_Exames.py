@@ -31,7 +31,15 @@ def save_pdf(pdf, patient_name, document_text, doc_type, document_date=None, inc
         pdf.ln(30)
         pdf.cell(0, 10, txt = f"{document_date.strftime('%d/%m/%Y')}", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
 
-
+def false_callback():
+    for k in st.session_state.keys():
+        if k.endswith("_labs") or k.endswith("_imagem") or k.endswith("_cardio") or k.endswith("_aval"):
+            st.session_state[k] = False    
+        st.session_state["outr_ex"] = ""
+        st.session_state["outros_img"] = ""
+        st.session_state["outro_esp"] = ""
+    
+    
 def main():
     # Create or get the session state
     if "session" not in st.session_state:
@@ -65,12 +73,12 @@ def main():
             line = lines[i].strip()  # Remove the newline character at the end of the line
             # Alternate between columns based on the index of the line
             if i % 2 == 0:
-                selections[line] = col1.checkbox(line)
+                selections[line] = col1.checkbox(line, key=line + "_labs")
             else:
-                selections[line] = col2.checkbox(line)
+                selections[line] = col2.checkbox(line, key=line + "_labs")
 
     # Add a text area for additional notes or input
-    outros_exames = st.text_area("Exames Adicionais", "")
+    outros_exames = st.text_area("Exames Adicionais", "", key="outr_ex")
     st.divider()
     
     # Imagem
@@ -92,7 +100,7 @@ def main():
                 imagem_selections[line] = col3.checkbox(line, key=line + "_imagem")
 
     # Add a text area for additional notes or input
-    outros_imagem = st.text_area("Exames Adicionais", "", key="outros_imagem")
+    outros_imagem = st.text_area("Exames Adicionais", "", key="outros_img")
     st.divider()
 
     st.header('Exames Cardiológicos')
@@ -123,9 +131,9 @@ def main():
         for i in range(len(lines)):
             line = lines[i].strip()  # Remove the newline character at the end of the line
             # Alternate between columns based on the index of the line
-            aval_selections[line] = st.checkbox(line)
+            aval_selections[line] = st.checkbox(line, key=line + "_aval")
             
-    outro_esp = st.text_input("Outro", "")
+    outro_esp = st.text_input("Outro", "", key="outro_esp")
     # Add a text area for additional notes or input
     obs_aval = st.text_area("Observações", "Solicito liberação pré-operatória.")
     st.divider()
@@ -134,7 +142,7 @@ def main():
     include_date = st.checkbox('Incluir data no documento')
     
     st.divider()
-    colb1, colb2 = st.columns(2)
+    colb1, colb2, colb3 = st.columns(3)
     if colb1.button('Criar Documento'):
         # Generate document text for Exames Laboratoriais
         document_text_labs = ""
@@ -201,6 +209,9 @@ def main():
     with open('my_pdf.pdf', "rb") as f:
         colb2.download_button('Download PDF', f, file_name="Documento.pdf") 
 
+    # Clear checkboxes
+    colb3.button("Limpar", on_click=false_callback)
+    
 if __name__ == "__main__":
      # Create an instance of the Authenticate class
     authenticator = stauth.Authenticate(
