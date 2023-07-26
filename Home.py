@@ -9,7 +9,7 @@ def main():
     # Create or get the session state
     if "session" not in st.session_state:
         st.session_state.session = qm.SessionState()
-        
+
     # Define o caminho para o diretório "data"
     data_dir = "src/tabelas"
 
@@ -30,25 +30,24 @@ def main():
         if f.endswith(".json"):
             # Adiciona o nome do arquivo à lista de arquivos .json
             json_files.append(f)
-            
+
             # Define o caminho completo para o arquivo
             file_path = os.path.join(data_dir, f)
-            
+
             # Abre o arquivo e carrega o conteúdo como um dicionário
-            decrypted = qm.load_and_decrypt(file_path, table_pass)                              
+            decrypted = qm.load_and_decrypt(file_path, table_pass)
             options.append(decrypted["DATA_DA_TABELA"])
 
-
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
+    sorted_dates = sorted(options, key=lambda x: (
+        x.split('/')[1], x.split('/')[0]), reverse=True)
+    selected_tabela = st.sidebar.selectbox(
+        "Escolha uma tabela de preço:", sorted_dates)
     authenticator.logout("Logout", "sidebar")
-    sorted_dates = sorted(options, key=lambda x: (x.split('/')[1], x.split('/')[0]), reverse=True)
-    selected_tabela = st.sidebar.selectbox("Escolha uma tabela de preço:", sorted_dates)
-
     # Carrega o arquivo .json correspondente à tabela selecionada
     if selected_tabela:
-        data_tabela = qm.load_and_decrypt(os.path.join(data_dir, json_files[options.index(selected_tabela)]), table_pass)
-        
-            
+        data_tabela = qm.load_and_decrypt(os.path.join(
+            data_dir, json_files[options.index(selected_tabela)]), table_pass)
 
     ####### Pagina principal #######
 
@@ -69,7 +68,7 @@ def main():
     altura_cm = float(altura_cm)
     peso = float(peso.replace(",", "."))
     altura = altura_cm / 100
-    
+
     # Calcula o IMC
     imc = peso / (altura * altura)
 
@@ -94,15 +93,14 @@ def main():
     # Cria um dicionário vazio para armazenar o status de cada checkbox
     checkbox_status = {}
 
-
     # Verifica se a chave "CIRURGIAS_EQUIPE" está presente no dicionário
     if "CIRURGIAS_EQUIPE" in data_tabela:
         # Ordena os valores na lista associada à chave "CIRURGIAS_EQUIPE" em ordem alfabética
         sorted_values = sorted(data_tabela["CIRURGIAS_EQUIPE"])
-        
+
         # Calcula o número de valores em cada coluna
         values_per_column = math.ceil(len(sorted_values) / 2)
-        
+
         # Itera sobre cada valor na lista ordenada
         for i, value in enumerate(sorted_values):
             # Verifica se o índice é menor que o número de valores por coluna
@@ -114,7 +112,8 @@ def main():
                 checkbox_status[value] = col4.checkbox(value)
 
     st.divider()
-    tipo_protese = st.selectbox("Escolha uma Textura", ["Texturizada", "Poliuretano"])
+    tipo_protese = st.selectbox("Escolha uma Textura", [
+                                "Texturizada", "Poliuretano"])
     st.divider()
     # Cria um menu suspenso expansível com o título "Extras"
     with st.expander("Extras"):
@@ -129,22 +128,23 @@ def main():
 
     # Conversation
     conversation = st.session_state.session.messages
-        
+
     # Cria um botão "Calcular"
     if st.button("Calcular"):
         # Cria uma lista vazia para armazenar os nomes dos checkboxes marcados
         checked_boxes = []
-        
+
         # Itera sobre cada item no dicionário checkbox_status
         for key, value in checkbox_status.items():
             # Verifica se o checkbox está marcado
             if value:
                 # Adiciona o nome do checkbox à lista checked_boxes
                 checked_boxes.append(key)
-                
+
         # Cria uma lista para armazenar os valores dos campos extras
-        extra_values = [valor_ajuste, valor_protese, tempo_lipo, tempo_sala, dias_internamento, valor_anestesia, valor_equipe, tipo_protese]
-        
+        extra_values = [valor_ajuste, valor_protese, tempo_lipo, tempo_sala,
+                        dias_internamento, valor_anestesia, valor_equipe, tipo_protese]
+
         # Chama a função calculate quando o botão for clicado
         if checked_boxes:
             msg = qm.calculate(checked_boxes, extra_values, data_tabela)
@@ -160,19 +160,21 @@ def main():
             st.session_state.session.messages = conversation
         else:
             st.info('Selecione pelo menos uma cirurgia', icon="ℹ️")
-    
+
+
 if __name__ == "__main__":
     # Create an instance of the Authenticate class
     authenticator = stauth.Authenticate(
-    dict(st.secrets['credentials']),
-    st.secrets['cookie']['name'],
-    st.secrets['cookie']['key'],
-    st.secrets['cookie']['expiry_days'],
-    st.secrets['preauthorized']
-)
+        dict(st.secrets['credentials']),
+        st.secrets['cookie']['name'],
+        st.secrets['cookie']['key'],
+        st.secrets['cookie']['expiry_days'],
+        st.secrets['preauthorized']
+    )
     table_pass = st.secrets['table_pass']["pass"]
-    
-    name, authentication_status, username = authenticator.login("Login", "main")
+
+    name, authentication_status, username = authenticator.login(
+        "Login", "main")
     if authentication_status == False:
         st.error("Username/password is incorrect")
 
@@ -181,4 +183,3 @@ if __name__ == "__main__":
 
     if authentication_status:
         main()
-    

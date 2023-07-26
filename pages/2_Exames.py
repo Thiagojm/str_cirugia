@@ -7,59 +7,65 @@ import streamlit_authenticator as stauth
 
 class CustomPDF(FPDF):
     def header(self):
-        self.set_font("Helvetica", 'BI' , size = 15)
-        self.cell(200, 10, txt = "Dr. Thiago Jung Mendaçolli", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
-        self.cell(200, 10, txt = "CIRURGIA PLÁSTICA", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
-        self.cell(0, 10, txt = ("_" * 60), new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
+        self.set_font("Helvetica", 'BI', size=15)
+        self.cell(200, 10, txt="Dr. Thiago Jung Mendaçolli",
+                  new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
+        self.cell(200, 10, txt="CIRURGIA PLÁSTICA",
+                  new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
+        self.cell(0, 10, txt=("_" * 60), new_x=XPos.LMARGIN,
+                  new_y=YPos.NEXT, align='C')
 
     def footer(self):
         self.set_y(-40)
-        self.set_font("Helvetica", size = 12)
-        self.cell(0, 10, txt = ("_" * 60), new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
-        self.multi_cell(0, 10, txt = "Clínica Bioethos: Rua Padre Montoya, 300 - Centro - CEP 85851-080, Foz do Iguaçu - PR\nTel: (45) 3028-1282 - Whats: (45) 98805-0334 www.drthiagocirurgiaplastica.com.br", align = 'C')
-        
+        self.set_font("Helvetica", size=12)
+        self.cell(0, 10, txt=("_" * 60), new_x=XPos.LMARGIN,
+                  new_y=YPos.NEXT, align='C')
+        self.multi_cell(0, 10, txt="Clínica Bioethos: Rua Padre Montoya, 300 - Centro - CEP 85851-080, Foz do Iguaçu - PR\nTel: (45) 3028-1282 - Whats: (45) 98805-0334 www.drthiagocirurgiaplastica.com.br", align='C')
+
 
 def save_pdf(pdf, patient_name, document_text, doc_type, document_date=None, include_date=False):
     pdf.set_auto_page_break(auto=True, margin=40)
     pdf.add_page()
-    pdf.set_font("Helvetica", size = 15)
-    pdf.cell(0, 20, txt = doc_type, new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
-    pdf.cell(0, 20, txt = f"Nome: {patient_name}", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'L')
+    pdf.set_font("Helvetica", size=15)
+    pdf.cell(0, 20, txt=doc_type, new_x=XPos.LMARGIN,
+             new_y=YPos.NEXT, align='C')
+    pdf.cell(0, 20, txt=f"Nome: {patient_name}",
+             new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='L')
     pdf.ln(10)
-    pdf.multi_cell(0, 10, txt = document_text)
+    pdf.multi_cell(0, 10, txt=document_text)
     if include_date and document_date is not None:
         pdf.ln(30)
-        pdf.cell(0, 10, txt = f"{document_date.strftime('%d/%m/%Y')}", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align = 'C')
+        pdf.cell(0, 10, txt=f"{document_date.strftime('%d/%m/%Y')}",
+                 new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
+
 
 def false_callback():
     for k in st.session_state.keys():
         if k.endswith("_labs") or k.endswith("_imagem") or k.endswith("_cardio") or k.endswith("_aval"):
-            st.session_state[k] = False    
+            st.session_state[k] = False
         st.session_state["outr_ex"] = ""
         st.session_state["outros_img"] = ""
         st.session_state["outro_esp"] = ""
-    
-    
+
+
 def main():
-    # Create or get the session state
-    if "session" not in st.session_state:
-        st.session_state.session = qm.SessionState()
-    
+
     if 'patient_name' not in st.session_state:
-        st.session_state['patient_name'] = ''    
+        st.session_state['patient_name'] = ''
 
     if 'cirurgia_name' not in st.session_state:
-        st.session_state['cirurgia_name'] = ''  
-    
+        st.session_state['cirurgia_name'] = ''
+
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
-    
+
     st.title('Pré Operatório')
-    
-    patient_name = st.text_input('Nome do Paciente', value=st.session_state.patient_name, key="pacient_name")
+
+    patient_name = st.text_input(
+        'Nome do Paciente', value=st.session_state.patient_name, key="pacient_name")
     st.session_state.patient_name = patient_name
     st.divider()
-    
+
     st.header('Exames Laboratoriais')
 
     # Create two columns
@@ -70,7 +76,8 @@ def main():
     with open("src/labs/Labs.txt", "r", encoding="UTF-8") as file:
         lines = file.readlines()
         for i in range(len(lines)):
-            line = lines[i].strip()  # Remove the newline character at the end of the line
+            # Remove the newline character at the end of the line
+            line = lines[i].strip()
             # Alternate between columns based on the index of the line
             if i % 2 == 0:
                 selections[line] = col1.checkbox(line, key=line + "_labs")
@@ -80,7 +87,7 @@ def main():
     # Add a text area for additional notes or input
     outros_exames = st.text_area("Exames Adicionais", "", key="outr_ex")
     st.divider()
-    
+
     # Imagem
     st.header('Exames de Imagem')
 
@@ -92,19 +99,22 @@ def main():
     with open("src/imagem/imagem.txt", "r", encoding="UTF-8") as file:
         lines = file.readlines()
         for i in range(len(lines)):
-            line = lines[i].strip()  # Remove the newline character at the end of the line
+            # Remove the newline character at the end of the line
+            line = lines[i].strip()
             # Alternate between columns based on the index of the line
             if i % 2 == 0:
-                imagem_selections[line] = col2.checkbox(line, key=line + "_imagem")
+                imagem_selections[line] = col2.checkbox(
+                    line, key=line + "_imagem")
             else:
-                imagem_selections[line] = col3.checkbox(line, key=line + "_imagem")
+                imagem_selections[line] = col3.checkbox(
+                    line, key=line + "_imagem")
 
     # Add a text area for additional notes or input
     outros_imagem = st.text_area("Exames Adicionais", "", key="outros_img")
     st.divider()
 
     st.header('Exames Cardiológicos')
-    
+
     # Create two columns
     col4, col5 = st.columns(2)
 
@@ -113,34 +123,40 @@ def main():
     with open("src/cardio/cardio.txt", "r", encoding="UTF-8") as file:
         lines = file.readlines()
         for i in range(len(lines)):
-            line = lines[i].strip()  # Remove the newline character at the end of the line
+            # Remove the newline character at the end of the line
+            line = lines[i].strip()
             # Alternate between columns based on the index of the line
             if i % 2 == 0:
-                cardio_selections[line] = col4.checkbox(line, key=line + "_cardio")
+                cardio_selections[line] = col4.checkbox(
+                    line, key=line + "_cardio")
             else:
-                cardio_selections[line] = col5.checkbox(line, key=line + "_cardio")
+                cardio_selections[line] = col5.checkbox(
+                    line, key=line + "_cardio")
 
     st.divider()
     st.header('Avaliação de Especialista')
     # Here you can add the elements you want to show under "Avaliação de Especialista"
     # Read the file and create a checkbox for each line, alternating between the two columns
-    cirurgia_name = st.text_input('Indicação', value=st.session_state.cirurgia_name, key="cirurgia_name")
+    cirurgia_name = st.text_input(
+        'Indicação', value=st.session_state.cirurgia_name, key="cirurgia_name")
     aval_selections = {}  # Dictionary to store the selections
     with open("src/aval/aval.txt", "r", encoding="UTF-8") as file:
         lines = file.readlines()
         for i in range(len(lines)):
-            line = lines[i].strip()  # Remove the newline character at the end of the line
+            # Remove the newline character at the end of the line
+            line = lines[i].strip()
             # Alternate between columns based on the index of the line
             aval_selections[line] = st.checkbox(line, key=line + "_aval")
-            
+
     outro_esp = st.text_input("Outro", "", key="outro_esp")
     # Add a text area for additional notes or input
-    obs_aval = st.text_area("Observações", "Solicito liberação pré-operatória.")
+    obs_aval = st.text_area(
+        "Observações", "Solicito liberação pré-operatória.")
     st.divider()
-    
+
     document_date = st.date_input('Data do Documento', value=None, )
     include_date = st.checkbox('Incluir data no documento')
-    
+
     st.divider()
     colb1, colb2, colb3 = st.columns(3)
     if colb1.button('Criar Documento'):
@@ -175,7 +191,6 @@ def main():
                 document_text_aval += f"- {outro_esp}\n"
             document_text_aval += f"\nOBSERVAÇÃO:\n{obs_aval}"
 
-        
         # Replace these with the actual values you want to use
         filename = "my_pdf.pdf"
         doc_type_labs = "Exames Laboratoriais"
@@ -188,16 +203,20 @@ def main():
 
         # Save PDF for Exames Laboratoriais
         if document_text_labs:
-            save_pdf(pdf, patient_name, document_text_labs, doc_type_labs, document_date, include_date)
+            save_pdf(pdf, patient_name, document_text_labs,
+                     doc_type_labs, document_date, include_date)
         # Save PDF for Exames de Imagem
         if document_text_imagem:
-            save_pdf(pdf, patient_name, document_text_imagem, doc_type_imagem, document_date, include_date)
+            save_pdf(pdf, patient_name, document_text_imagem,
+                     doc_type_imagem, document_date, include_date)
         # Save PDF for Exames de Cardio
         if document_text_cardio:
-            save_pdf(pdf, patient_name, document_text_cardio, doc_type_cardio, document_date, include_date)
+            save_pdf(pdf, patient_name, document_text_cardio,
+                     doc_type_cardio, document_date, include_date)
         # Save PDF for Aval
         if document_text_aval:
-            save_pdf(pdf, patient_name, document_text_aval, doc_type_aval, document_date, include_date)
+            save_pdf(pdf, patient_name, document_text_aval,
+                     doc_type_aval, document_date, include_date)
 
         # Output the PDF
         pdf.output(filename)
@@ -207,23 +226,24 @@ def main():
 
     # Download the PDF
     with open('my_pdf.pdf', "rb") as f:
-        colb2.download_button('Download PDF', f, file_name="Documento.pdf") 
+        colb2.download_button('Download PDF', f, file_name="Documento.pdf")
 
     # Clear checkboxes
     colb3.button("Limpar", on_click=false_callback)
-    
+
+
 if __name__ == "__main__":
-     # Create an instance of the Authenticate class
+    # Create an instance of the Authenticate class
     authenticator = stauth.Authenticate(
-    dict(st.secrets['credentials']),
-    st.secrets['cookie']['name'],
-    st.secrets['cookie']['key'],
-    st.secrets['cookie']['expiry_days'],
-    st.secrets['preauthorized']
-)
-    table_pass = st.secrets['table_pass']["pass"]
-    
-    name, authentication_status, username = authenticator.login("Login", "main")
+        dict(st.secrets['credentials']),
+        st.secrets['cookie']['name'],
+        st.secrets['cookie']['key'],
+        st.secrets['cookie']['expiry_days'],
+        st.secrets['preauthorized']
+    )
+
+    name, authentication_status, username = authenticator.login(
+        "Login", "main")
     if authentication_status == False:
         st.error("Username/password is incorrect")
 
