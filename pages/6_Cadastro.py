@@ -8,7 +8,7 @@ directories = ['src/atestados', 'src/laudos', 'src/receitas', 'src/termos']
 
 def list_files_in_directory(directory):
     # List all files in the given directory
-    return [os.path.splitext(f)[0] for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
+    return sorted([os.path.splitext(f)[0] for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))])
 
 def create_file(directory, filename, content):
     # Create a new file in the given directory with the given content
