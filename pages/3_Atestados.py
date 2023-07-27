@@ -21,7 +21,7 @@ class CustomPDF(FPDF):
         self.set_font("Helvetica", size=10)
         self.cell(0, 10, txt=("_" * 60), new_x=XPos.LMARGIN,
                   new_y=YPos.NEXT, align='C')
-        self.multi_cell(0, 10, txt="Clínica Bioethos: Rua Padre Montoya, 300 - Centro - CEP 85851-080, Foz do Iguaçu - PR\nTel: (45) 3028-1282 - Whats: (45) 98805-0334 www.drthiagocirurgiaplastica.com.br", align='C')
+        self.multi_cell(0, 10, txt="Clínica Bioethos: Rua Padre Montoya, 300 - Centro - CEP 85851-080, Foz do Iguaçu - PR\nTel: (45) 3028-1282 - Whats: (45) 98805-0334 - www.drthiagocirurgiaplastica.com.br", align='C')
 
 
 def save_pdf(pdf, patient_name, document_text, doc_type, document_date=None, include_date=False):

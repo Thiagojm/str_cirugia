@@ -1,7 +1,6 @@
 import streamlit as st
 import os
 import streamlit_authenticator as stauth
-import qmod as qm
 
 # Define the directories to look into
 directories = ['src/atestados', 'src/laudos', 'src/receitas', 'src/termos']
@@ -52,21 +51,21 @@ def main():
             with open(os.path.join(directory_mapping[directory], file_to_edit + '.txt'), 'r', encoding="UTF-8") as f:
                 content = f.read()
             updated_content = st.text_area(
-                'Conteúdo do Arquivo', value=content, height=600)
+                'Conteúdo do Arquivo', value=content, height=500)
             if st.button('Salvar modificações'):
                 create_file(
                     directory_mapping[directory], file_to_edit, updated_content)
-                st.success('Arquivo editado com sucesso')
+                st.toast('Arquivo editado com sucesso', icon="✔️")
         else:
             st.write('Sem arquivos nesse diretório')
 
     elif action == 'Criar':
         # If the action is Create, provide a field to enter the filename and the content
         filename = st.text_input('Nome do arquivo')
-        content = st.text_area('Conteúdo', height=600)
+        content = st.text_area('Conteúdo', height=500)
         if st.button('Criar arquivo'):
             create_file(directory_mapping[directory], filename, content)
-            st.success('Arquivo criado com sucesso')
+            st.toast('Arquivo criado com sucesso', icon="✔️")
 
     elif action == 'Deletar':
         # If the action is Delete, list the files in the chosen directory for deletion
@@ -76,7 +75,7 @@ def main():
                 'Selecione um arquivo para deletar', files)
             if st.button('Deletar arquivo'):
                 delete_file(directory_mapping[directory], file_to_delete)
-                st.success('Arquivo deletado com sucesso.')
+                st.toast('Arquivo deletado com sucesso.', icon="✔️")
         else:
             st.write('Sem arquivos nesse diretório.')
 
