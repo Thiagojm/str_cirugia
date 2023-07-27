@@ -48,6 +48,12 @@ def false_callback():
         st.session_state["outro_esp"] = ""
 
 
+def preop_padrao(*lista_padrao):
+    for k in st.session_state.keys():
+        if k in lista_padrao:
+            st.session_state[k] = True
+
+
 def main():
 
     if 'patient_name' not in st.session_state:
@@ -55,6 +61,10 @@ def main():
 
     if 'cirurgia_name' not in st.session_state:
         st.session_state['cirurgia_name'] = ''
+
+    # Lista padrão de exames
+    lista_padrao = ["Hemograma Completo_labs", "TAP, TTPA_labs", "Eletrocardiograma com laudo_cardio", "Uréia e Creatinina_labs", "Glicemia_labs",
+                    "Sódio e Potássio_labs", "Vitamina D_labs", "Beta-HCG_labs", "Anestesiologia (Tel: 3576-8081)_aval", "Radiografia de Tórax PA + P_imagem"]
 
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
@@ -64,6 +74,7 @@ def main():
     patient_name = st.text_input(
         'Nome do Paciente', value=st.session_state.patient_name, key="pacient_name")
     st.session_state.patient_name = patient_name
+    st.button("Padrão", on_click=preop_padrao, args=lista_padrao)
     st.divider()
 
     st.header('Exames Laboratoriais')
