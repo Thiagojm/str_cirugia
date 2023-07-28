@@ -9,10 +9,10 @@ echo "Getting latest for" ${#repos[@]} "repositories using git pull"
 
 for repo in "${repos[@]}"
 do
-  rm /home/ubuntu/str_cirurgia/my_pdf.pdf
   echo ""
   echo "****** Getting latest for" ${repo} "******"
   cd "${repo}"
+  rm my_pdf.pdf
   git pull
   echo "******************************************"
   echo ""
