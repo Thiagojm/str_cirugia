@@ -3,6 +3,7 @@ from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 import qmod as qm
 import streamlit_authenticator as stauth
+import os
 
 
 class CustomPDF(FPDF):
@@ -264,8 +265,9 @@ def main():
         qm.show_pdf(filename)
 
     # Download the PDF
-    with open('my_pdf.pdf', "rb") as f:
-        colb2.download_button('Download PDF', f, file_name="Documento.pdf")
+    if os.access("my_pdf.pdf", os.R_OK):
+        with open('my_pdf.pdf', "rb") as f:
+            colb2.download_button('Download PDF', f, file_name="Documento.pdf")
 
     # Clear checkboxes
     colb3.button("Limpar", on_click=false_callback)

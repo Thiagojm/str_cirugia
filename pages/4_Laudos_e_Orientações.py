@@ -89,8 +89,9 @@ def main():
         qm.show_pdf(filename)
 
     # Download the PDF
-    with open('my_pdf.pdf', "rb") as f:
-        colb2.download_button('Download PDF', f, file_name="Documento.pdf")
+    if os.access("my_pdf.pdf", os.R_OK):
+        with open('my_pdf.pdf', "rb") as f:
+            colb2.download_button('Download PDF', f, file_name="Documento.pdf")
 
 
 if __name__ == "__main__":
