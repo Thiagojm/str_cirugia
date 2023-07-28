@@ -5,18 +5,18 @@ repos=(
 )
 
 echo ""
-echo "Getting latest for" ${#repos[@]} "repositories using pull --rebase"
+echo "Getting latest for" ${#repos[@]} "repositories using git pull"
 
 for repo in "${repos[@]}"
 do
-  rm my_pdf.pdf
+  rm /home/ubuntu/str_cirurgia/my_pdf.pdf
   echo ""
   echo "****** Getting latest for" ${repo} "******"
   cd "${repo}"
   git pull
   echo "******************************************"
   echo ""
-  echo "Restarting systemclt - input sudo password"
+  echo "Restarting systemclt"
   echo ""
 done
   sudo systemctl stop str-cirurgia.service
