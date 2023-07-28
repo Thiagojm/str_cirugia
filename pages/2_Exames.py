@@ -46,12 +46,22 @@ def false_callback():
         st.session_state["outr_ex"] = ""
         st.session_state["outros_img"] = ""
         st.session_state["outro_esp"] = ""
+        st.session_state["obs_aval"] = "Solicito liberação pré-operatória."
 
 
-def preop_padrao(*lista_padrao):
+def set_true(*lista):
+    false_callback()
     for k in st.session_state.keys():
-        if k in lista_padrao:
+        if k in lista and k == "obs_aval":
+            st.session_state[k] = "Solicito perda ponderal com meta de IMC < 28."
+
+        elif k in lista:
             st.session_state[k] = True
+
+
+def print_session():
+    for k in st.session_state.keys():
+        print(k, st.session_state[k])
 
 
 def main():
@@ -66,6 +76,19 @@ def main():
     lista_padrao = ["Hemograma Completo_labs", "TAP, TTPA_labs", "Eletrocardiograma com laudo_cardio", "Uréia e Creatinina_labs", "Glicemia_labs",
                     "Sódio e Potássio_labs", "Vitamina D_labs", "Beta-HCG_labs", "Anestesiologia (Tel: 3576-8081)_aval", "Radiografia de Tórax PA + P_imagem"]
 
+    # USG mama
+    usg_mama = ["Ultrassonografia de Mamas (com classificação BIRADS)_imagem"]
+
+    # USG Parede
+    usg_parede = [
+        "Ultrassonografia de Parede abdominal (para investigação de hérnias/ diástase)_imagem"]
+
+    # Cardio
+    cardio = ["Cardiologista_aval"]
+
+    # Dermato + Endócrino
+    end_nutri = ["Endocrinologista_aval", "Nutricionista_aval", "obs_aval"]
+
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
 
@@ -74,7 +97,12 @@ def main():
     patient_name = st.text_input(
         'Nome do Paciente', value=st.session_state.patient_name, key="pacient_name")
     st.session_state.patient_name = patient_name
-    st.button("Padrão", on_click=preop_padrao, args=lista_padrao)
+    colt1, colt2, colt3, colt4, colt5 = st.columns(5)
+    colt1.button("Padrão", on_click=set_true, args=lista_padrao)
+    colt2.button("USG Mama", on_click=set_true, args=usg_mama)
+    colt3.button("USG Parede", on_click=set_true, args=usg_parede)
+    colt4.button("Cardio", on_click=set_true, args=cardio)
+    colt5.button("End + Nutri", on_click=set_true, args=end_nutri)
     st.divider()
 
     st.header('Exames Laboratoriais')
@@ -162,7 +190,7 @@ def main():
     outro_esp = st.text_input("Outro", "", key="outro_esp")
     # Add a text area for additional notes or input
     obs_aval = st.text_area(
-        "Observações", "Solicito liberação pré-operatória.")
+        "Observações", "Solicito liberação pré-operatória.", key="obs_aval")
     st.divider()
 
     document_date = st.date_input('Data do Documento', value=None, )
