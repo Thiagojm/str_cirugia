@@ -13,7 +13,7 @@ do
   echo ""
   echo "****** Getting latest for" ${repo} "******"
   cd "${repo}"
-  git pull --rebase
+  git pull
   echo "******************************************"
   echo ""
   echo "Restarting systemclt - input sudo password"
