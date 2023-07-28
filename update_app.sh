@@ -12,7 +12,6 @@ do
   echo ""
   echo "****** Getting latest for" ${repo} "******"
   cd "${repo}"
-  rm my_pdf.pdf
   git pull
   echo "******************************************"
   echo ""
