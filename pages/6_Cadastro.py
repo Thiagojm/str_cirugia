@@ -30,17 +30,19 @@ def main():
     if 'cirurgia_name' not in st.session_state:
         st.session_state['cirurgia_name'] = ''
 
+    # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
+    authenticator.logout("Logout", "sidebar")
+
+    st.title('Cadastros')
+
     # Create a selectbox to choose the action
-    action = st.sidebar.selectbox(
+    action = st.selectbox(
         'Selecione uma ação', ['Editar', 'Criar', 'Deletar'])
 
     # Create a selectbox to choose the directory
     directory_mapping = {os.path.basename(dir): dir for dir in directories}
-    directory = st.sidebar.selectbox(
+    directory = st.selectbox(
         'Selecione um diretório', list(directory_mapping.keys()))
-
-    # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
-    authenticator.logout("Logout", "sidebar")
 
     if action == 'Editar':
         # If the action is Edit, list the files in the chosen directory for editing
@@ -92,6 +94,7 @@ if __name__ == "__main__":
 
     name, authentication_status, username = authenticator.login(
         "Login", "main")
+
     if authentication_status == False:
         st.error("Username/password is incorrect")
 

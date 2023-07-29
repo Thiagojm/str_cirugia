@@ -45,20 +45,26 @@ def main():
     if 'patient_name' not in st.session_state:
         st.session_state['patient_name'] = ''
 
+    # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
+    authenticator.logout("Logout", "sidebar")
+
     st.title('Atestados e Declarações')
     receitas_folder = "src/atestados"
+
+    patient_name = st.text_input(
+        'Nome do Paciente', value=st.session_state.patient_name, key="pacient_name")
+    st.session_state.patient_name = patient_name
+    doc_type = st.selectbox('Atestado ou Declaração', [
+                            'Atestado Médico', 'Declaração Médica'])
 
     # list all .txt files in the 'src/receitas' directory
     document_type = sorted([os.path.splitext(f)[0]
                            for f in os.listdir(receitas_folder) if f.endswith('.txt')])
 
-    selected_file = st.sidebar.selectbox(
-        'Que tipo de documento você gostaria de criar?',
+    selected_file = st.selectbox(
+        'Selecione um template.',
         document_type
     )
-
-    # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
-    authenticator.logout("Logout", "sidebar")
 
     # add the .txt extension back onto the selected file name
     selected_file_with_ext = selected_file + '.txt'
@@ -66,11 +72,6 @@ def main():
     with open(os.path.join(receitas_folder, selected_file_with_ext), 'r', encoding="UTF-8") as file:
         document_text = file.read()
 
-    patient_name = st.text_input(
-        'Nome do Paciente', value=st.session_state.patient_name, key="pacient_name")
-    st.session_state.patient_name = patient_name
-    doc_type = st.selectbox('Atestado ou Declaração', [
-                            'Atestado Médico', 'Declaração Médica'])
     document_text = st.text_area(
         'Texto do Documento', height=300, value=document_text)
     document_date = st.date_input('Data do Documento', value=None)
