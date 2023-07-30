@@ -163,7 +163,7 @@ def main():
             for entry in conversation:
                 message += entry["message"]
             st.divider()
-            st.text_area(" ", value=message, height=800, max_chars=10000)
+            st.text_area(" ", value=message, height=400)
 
             # Update the session state
             st.session_state.session.messages = conversation
