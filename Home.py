@@ -168,6 +168,7 @@ def main():
             # Update the session state
             st.session_state.session.messages = conversation
         else:
+            st.info('Selecione pelo menos uma cirurgia', icon="ℹ️")
             st.toast('Selecione pelo menos uma cirurgia', icon="ℹ️")
 
     colb2.button("Limpar", on_click=false_callback)
