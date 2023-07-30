@@ -5,6 +5,12 @@ import math
 import qmod as qm
 
 
+def false_callback():
+    for k in st.session_state.keys():
+        if k.endswith("_cir"):
+            st.session_state[k] = False
+
+
 def main():
     # Create or get the session state
     if "session" not in st.session_state:
@@ -106,10 +112,12 @@ def main():
             # Verifica se o índice é menor que o número de valores por coluna
             if i < values_per_column:
                 # Cria um checkbox na primeira coluna e associa seu status a uma variável no dicionário checkbox_status
-                checkbox_status[value] = col3.checkbox(value)
+                checkbox_status[value] = col3.checkbox(
+                    value, key=value + "_cir")
             else:
                 # Cria um checkbox na segunda coluna e associa seu status a uma variável no dicionário checkbox_status
-                checkbox_status[value] = col4.checkbox(value)
+                checkbox_status[value] = col4.checkbox(
+                    value, key=value + "_cir")
 
     st.divider()
     tipo_protese = st.selectbox("Escolha uma Textura", [
@@ -129,8 +137,9 @@ def main():
     # Conversation
     conversation = st.session_state.session.messages
 
+    colb1, colb2 = st.columns(2)
     # Cria um botão "Calcular"
-    if st.button("Calcular"):
+    if colb1.button("Calcular"):
         # Cria uma lista vazia para armazenar os nomes dos checkboxes marcados
         checked_boxes = []
 
@@ -160,6 +169,8 @@ def main():
             st.session_state.session.messages = conversation
         else:
             st.info('Selecione pelo menos uma cirurgia', icon="ℹ️")
+
+    colb2.button("Limpar", on_click=false_callback)
 
 
 if __name__ == "__main__":
