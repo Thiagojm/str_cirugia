@@ -12,6 +12,7 @@ do
   echo ""
   echo "****** Getting latest for" ${repo} "******"
   cd "${repo}"
+  git reset --hard
   git pull
   echo "******************************************"
   echo ""
