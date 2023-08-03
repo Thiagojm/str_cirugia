@@ -1,0 +1,5 @@
+NAME = "Dr. Thiago Jung Mendaçolli"
+ESPECIALIDADE = "CIRURGIA PLÁSTICA"
+FOOTER = "Clínica Bioethos: Rua Padre Montoya, 300 - Centro - CEP 85851-080, Foz do Iguaçu - PR\nTel: (45) 3028-1282 - Whats: (45) 98805-0334 - www.drthiagocirurgiaplastica.com.br"
+TERMO_NAME = "Dr. Thiago Jung Mendaçolli - Cirurgia Plástica"
+TERMO_TXT = "TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO"

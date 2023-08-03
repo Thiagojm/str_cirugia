@@ -4,14 +4,15 @@ from fpdf.enums import XPos, YPos
 import qmod as qm
 import streamlit_authenticator as stauth
 import os
+from cred_file import *
 
 
 class CustomPDF(FPDF):
     def header(self):
         self.set_font("Helvetica", 'BI', size=15)
-        self.cell(200, 10, txt="Dr. Thiago Jung Mendaçolli",
+        self.cell(200, 10, txt=NAME,
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
-        self.cell(200, 10, txt="CIRURGIA PLÁSTICA",
+        self.cell(200, 10, txt=ESPECIALIDADE,
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
         self.cell(0, 10, txt=("_" * 60), new_x=XPos.LMARGIN,
                   new_y=YPos.NEXT, align='C')
@@ -21,7 +22,7 @@ class CustomPDF(FPDF):
         self.set_font("Helvetica", size=12)
         self.cell(0, 10, txt=("_" * 60), new_x=XPos.LMARGIN,
                   new_y=YPos.NEXT, align='C')
-        self.multi_cell(0, 10, txt="Clínica Bioethos: Rua Padre Montoya, 300 - Centro - CEP 85851-080, Foz do Iguaçu - PR\nTel: (45) 3028-1282 - Whats: (45) 98805-0334 - www.drthiagocirurgiaplastica.com.br", align='C')
+        self.multi_cell(0, 10, txt=FOOTER, align='C')
 
 
 def save_pdf(pdf, patient_name, document_text, doc_type, document_date=None, include_date=False):

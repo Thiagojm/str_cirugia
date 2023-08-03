@@ -5,14 +5,15 @@ import os
 import streamlit_authenticator as stauth
 import qmod as qm
 import template as tp
+from cred_file import *
 
 
 class CustomPDF(FPDF):
     def header(self):
         self.set_font("Helvetica", 'BI', size=14)
-        self.cell(0, 10, txt="Dr. Thiago Jung Mendaçolli - Cirurgia Plástica",
+        self.cell(0, 10, txt=TERMO_NAME,
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
-        self.cell(0, 8, txt="TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO",
+        self.cell(0, 8, txt=TERMO_TXT,
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
         self.cell(0, 8, txt=("_" * 60), new_x=XPos.LMARGIN,
                   new_y=YPos.NEXT, align='C')
@@ -22,7 +23,7 @@ class CustomPDF(FPDF):
         self.set_font("Helvetica", size=8)
         self.cell(0, 6, txt=("_" * 110), new_x=XPos.LMARGIN,
                   new_y=YPos.NEXT, align='C')
-        self.multi_cell(0, 6, txt="Clínica Bioethos: Rua Padre Montoya, 300 - Centro - CEP 85851-080, Foz do Iguaçu - PR\nTel: (45) 3028-1282 - Whats: (45) 98805-0334 - www.drthiagocirurgiaplastica.com.br", align='C')
+        self.multi_cell(0, 6, txt=FOOTER, align='C')
 
 
 def save_pdf(pdf, patient_name, document_text, cirurgia_name, observacao, document_date=None, include_date=False):
@@ -30,7 +31,7 @@ def save_pdf(pdf, patient_name, document_text, cirurgia_name, observacao, docume
     pdf.add_page()
     pdf.set_font("Helvetica", size=10)
     if document_text:
-        pdf.cell(0, 10, txt="TERMO DE CONSENTIMENTO LIVRE E ESCLARECIDO",
+        pdf.cell(0, 10, txt=TERMO_TXT,
                  new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
         pdf.ln(5)
         pdf.multi_cell(0, 6, txt=document_text)
