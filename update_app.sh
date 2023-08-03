@@ -19,6 +19,6 @@ do
   echo "Restarting systemclt"
   echo ""
 done
-  sudo systemctl stop str-cirurgia.service
-  sudo systemctl start str-cirurgia.service
-  sudo systemctl status str-cirurgia.service
+  sudo systemctl stop str_cirurgia.service
+  sudo systemctl start str_cirurgia.service
+  sudo systemctl status str_cirurgia.service
