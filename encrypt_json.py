@@ -3,6 +3,7 @@ from base64 import b64encode, b64decode
 import hashlib
 from Crypto.Cipher import AES
 
+
 def encrypt(json_data, password):
     # Convert password to 32 byte AES key
     key = hashlib.sha256(password.encode()).digest()
@@ -21,6 +22,7 @@ def encrypt(json_data, password):
     }
 
     return result
+
 
 def decrypt(enc_dict, password):
     # Convert password to 32 byte AES key
@@ -41,39 +43,57 @@ def decrypt(enc_dict, password):
 
     return data
 
+
 def save_encrypted(data, filename):
     with open(filename, 'w') as f:
         json.dump(data, f)
+
 
 def load_and_decrypt(filename, password):
     with open(filename, 'r') as f:
         enc_data = json.load(f)
     return decrypt(enc_data, password)
 
+
+def save_decrypted(data, filename):
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+
 def main():
     # Encryption password
-    password = input('What password would you like to use?: ')
+    password = input('Enter the password: ')
 
-    file_to_encrypt = input('What file would you like to encrypt?: ')
-    # Open the JSON file and load the data
-    with open(file_to_encrypt, encoding='utf-8') as f:
-        data = json.load(f)
+    action = input('Would you like to encrypt or decrypt? (e/d): ')
+    if action.lower() == 'e':
+        file_to_encrypt = input('What file would you like to encrypt?: ')
+        # Open the JSON file and load the data
+        with open(file_to_encrypt, encoding='utf-8') as f:
+            data = json.load(f)
 
-    # Convert JSON data to string
-    json_data = json.dumps(data).encode('utf-8')
+        # Convert JSON data to string
+        json_data = json.dumps(data).encode('utf-8')
 
-    # Encrypt data
-    encrypted = encrypt(json_data, password)
+        # Encrypt data
+        encrypted = encrypt(json_data, password)
 
-    print("Encrypted:", encrypted)
+        print("Encrypted:", encrypted)
 
-    # Save encrypted data
-    save_encrypted(encrypted, f'data/{file_to_encrypt}_enc.json')
+        # Save encrypted data
+        save_encrypted(encrypted, f'{file_to_encrypt}_enc.json')
+    elif action.lower() == 'd':
+        file_to_decrypt = input('What file would you like to decrypt?: ')
+        # Load encrypted data and decrypt it
+        decrypted = load_and_decrypt(file_to_decrypt, password)
 
-    # Load encrypted data and decrypt it
-    decrypted = load_and_decrypt(f'data/{file_to_encrypt}_enc.json', password)
+        # Save decrypted data
+        save_decrypted(decrypted, f'{file_to_decrypt}_dec.json')
+        print("Decrypted:", decrypted)
 
-    print("Decrypted:", decrypted)
+    else:
+        print(
+            'Invalid action. Please enter either "e" for encryption or "d" for decryption.')
+
 
 if __name__ == '__main__':
     main()
