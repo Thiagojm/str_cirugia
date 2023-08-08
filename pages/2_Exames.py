@@ -76,7 +76,7 @@ def main():
 
     # Lista padrão de exames
     lista_padrao = ["Hemograma Completo_labs", "TAP, TTPA_labs", "Eletrocardiograma com laudo_cardio", "Uréia e Creatinina_labs", "Glicemia_labs",
-                    "Sódio e Potássio_labs", "Vitamina D_labs", "Beta-HCG_labs", "Anestesiologia (Tel: 3576-8081)_aval", "Radiografia de Tórax PA + P_imagem"]
+                    "Sódio e Potássio_labs", "Vitamina D_labs", "Beta-HCG_labs", "Anestesiologia (Whats/ Tel: 3576-8081)_aval", "Radiografia de Tórax PA + P_imagem"]
 
     # USG mama
     usg_mama = ["Ultrassonografia de Mamas (com classificação BIRADS)_imagem"]
