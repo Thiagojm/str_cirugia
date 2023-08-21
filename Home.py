@@ -5,10 +5,12 @@ import math
 import qmod as qm
 
 
+# Clear cirurgias e messages
 def false_callback():
     for k in st.session_state.keys():
         if k.endswith("_cir"):
             st.session_state[k] = False
+    st.session_state.session.messages = []
 
 
 def main():
