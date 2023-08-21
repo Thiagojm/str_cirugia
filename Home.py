@@ -15,6 +15,9 @@ def main():
     # Create or get the session state
     if "session" not in st.session_state:
         st.session_state.session = qm.SessionState()
+    
+    if 'patient_name' not in st.session_state:
+        st.session_state['patient_name'] = ''
 
     # Define o caminho para o diretório "data"
     data_dir = "src/tabelas"
@@ -61,6 +64,10 @@ def main():
 
     # Header
     st.header("Calculadora Dr. Thiago Jung")
+    st.divider()
+    patient_name = st.text_input(
+        'Nome do Paciente', value=st.session_state.patient_name, key="pacient_name")
+    st.session_state.patient_name = patient_name
     st.divider()
     # Cria duas colunas
     col1, col2 = st.columns(2)
