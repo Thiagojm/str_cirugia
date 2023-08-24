@@ -3,6 +3,7 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import math
 import qmod as qm
+from mongo_mod import *
 
 
 # Clear cirurgias e messages
@@ -21,6 +22,13 @@ def main():
     if 'patient_name' not in st.session_state:
         st.session_state['patient_name'] = ''
 
+    # Start Db
+    # Create a connection using MongoClient
+    client = init_connection()
+
+    # Connect to the desired database
+    db = client.my_test_db
+    
     # Define o caminho para o diretório "data"
     data_dir = "src/tabelas"
 

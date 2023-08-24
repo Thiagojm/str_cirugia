@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import streamlit_authenticator as stauth
+from mongo_mod import *
 
 # Define the directories to look into
 directories = ['src/atestados', 'src/laudos', 'src/receitas', 'src/termos']
@@ -30,6 +31,13 @@ def main():
     if 'cirurgia_name' not in st.session_state:
         st.session_state['cirurgia_name'] = ''
 
+    # Start Db
+    # Create a connection using MongoClient
+    client = init_connection()
+
+    # Connect to the desired database
+    db = client.my_test_db
+    
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
 
@@ -40,23 +48,21 @@ def main():
         'Selecione uma ação', ['Editar', 'Criar', 'Deletar'])
 
     # Create a selectbox to choose the directory
-    directory_mapping = {os.path.basename(dir): dir for dir in directories}
+    directory_mapping = list_collections(db)
     directory = st.selectbox(
-        'Selecione um diretório', list(directory_mapping.keys()))
+        'Selecione um diretório', directory_mapping)
 
     if action == 'Editar':
         # If the action is Edit, list the files in the chosen directory for editing
-        files = list_files_in_directory(directory_mapping[directory])
+        files = list_field_names(db, directory)
         if files:
             file_to_edit = st.selectbox(
                 'Escolha um arquivo para editar', files)
-            with open(os.path.join(directory_mapping[directory], file_to_edit + '.txt'), 'r', encoding="UTF-8") as f:
-                content = f.read()
+            content = get_document_content(db, directory, file_to_edit)
             updated_content = st.text_area(
                 'Conteúdo do Arquivo', value=content, height=500)
             if st.button('Salvar modificações'):
-                create_file(
-                    directory_mapping[directory], file_to_edit, updated_content)
+                update_document_content_by_field(db, directory, file_to_edit, updated_content)
                 st.toast('Arquivo editado com sucesso', icon="✔️")
         else:
             st.write('Sem arquivos nesse diretório')
