@@ -3,25 +3,6 @@ import os
 import streamlit_authenticator as stauth
 from mongo_mod import *
 
-# Define the directories to look into
-directories = ['src/atestados', 'src/laudos', 'src/receitas', 'src/termos']
-
-
-def list_files_in_directory(directory):
-    # List all files in the given directory
-    return sorted([os.path.splitext(f)[0] for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))])
-
-
-def create_file(directory, filename, content):
-    # Create a new file in the given directory with the given content
-    with open(os.path.join(directory, filename + '.txt'), 'w', encoding="UTF-8") as f:
-        f.write(content)
-
-
-def delete_file(directory, filename):
-    # Delete the specified file
-    os.remove(os.path.join(directory, filename + '.txt'))
-
 
 def main():
 
@@ -36,7 +17,7 @@ def main():
     client = init_connection()
 
     # Connect to the desired database
-    db = client.my_test_db
+    db = client.drtjm
     
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
