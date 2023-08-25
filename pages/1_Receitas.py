@@ -73,6 +73,7 @@ def main():
         documents
     )
 
+    # get value from document
     doc_value = get_document_content(db, rec_coll, selected_file)
     
     document_text = st.text_area(
