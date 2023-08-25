@@ -62,7 +62,7 @@ def insert_one_document(db, collection_name, field_name, content):
     """
     
     if document_exists(db, collection_name, field_name):
-        print(f"A document with the field name '{field_name}' already exists.")
+        st.toast(f"A document with the field name '{field_name}' already exists.", icon="❌")
         return None
     
     collection = db[collection_name]
@@ -71,11 +71,10 @@ def insert_one_document(db, collection_name, field_name, content):
     try:
         result = collection.insert_one(document)
         if result:
-            print("Inserted document with id:", result.inserted_id)
             return result
     
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        st.toast(f"An unexpected error occurred: {e}", icon="❗")
 
     return None
 
@@ -114,7 +113,7 @@ def get_document_content(db, collection_name, field_name):
         content = document[field_name]
         return content
     else:
-        print("No document found.")
+        st.toast("No document found.", icon="❗")
         return None
 
 def delete_document(db, collection_name, field_name):

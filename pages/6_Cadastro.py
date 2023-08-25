@@ -62,8 +62,8 @@ def main():
             updated_content = st.text_area(
                 'Conteúdo do Arquivo', value=content, height=500)
             if st.button('Salvar modificações'):
-                update_document_content_by_field(db, directory, file_to_edit, updated_content)
-                st.toast('Arquivo editado com sucesso', icon="✔️")
+                num_edited = update_document_content_by_field(db, directory, file_to_edit, updated_content)
+                st.toast(f'{num_edited} arquivo editado com sucesso', icon="✔️")
         else:
             st.write('Sem arquivos nesse diretório')
 
@@ -72,20 +72,22 @@ def main():
         filename = st.text_input('Nome do arquivo')
         content = st.text_area('Conteúdo', height=500)
         if st.button('Criar arquivo'):
-            create_file(directory_mapping[directory], filename, content)
-            st.toast('Arquivo criado com sucesso', icon="✔️")
+            insterted = insert_one_document(db, directory, filename, content)
+            if insterted:
+                st.toast('Arquivo criado com sucesso', icon="✔️")
 
     elif action == 'Deletar':
         # If the action is Delete, list the files in the chosen directory for deletion
-        files = list_files_in_directory(directory_mapping[directory])
+        files = list_field_names(db, directory)
         if files:
             file_to_delete = st.selectbox(
                 'Selecione um arquivo para deletar', files)
             if st.button('Deletar arquivo'):
-                delete_file(directory_mapping[directory], file_to_delete)
-                st.toast('Arquivo deletado com sucesso.', icon="✔️")
+                num_deleted = delete_document(db, directory, file_to_delete)
+                if num_deleted:
+                    st.toast('Arquivo deletado com sucesso.', icon="✔️")
         else:
-            st.write('Sem arquivos nesse diretório.')
+            st.toast("Something went wrong.", icon="❗")
 
 
 if __name__ == "__main__":
