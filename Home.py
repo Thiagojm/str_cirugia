@@ -2,8 +2,8 @@ import os
 import streamlit as st
 import streamlit_authenticator as stauth
 import math
-import qmod as qm
-from mongo_mod import *
+import modules.qmod as qm
+from modules.mongo_mod import *
 
 
 # Clear cirurgias e messages

@@ -1,10 +1,10 @@
 import streamlit as st
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
-import qmod as qm
+import modules.qmod as qm
 import streamlit_authenticator as stauth
 import os
-from cred_file import *
+from modules.cred_file import *
 
 
 class CustomPDF(FPDF):

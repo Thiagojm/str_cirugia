@@ -3,9 +3,9 @@ from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 import os
 import streamlit_authenticator as stauth
-import qmod as qm
-from cred_file import *
-from mongo_mod import *
+import modules.qmod as qm
+from modules.cred_file import *
+from modules.mongo_mod import *
 
 
 class CustomPDF(FPDF):

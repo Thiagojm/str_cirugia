@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 import streamlit_authenticator as stauth
-from mongo_mod import *
+from modules.mongo_mod import *
 
 
 def main():
