@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 import streamlit_authenticator as stauth
 from modules.mongo_mod import *
 
