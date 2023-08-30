@@ -27,7 +27,7 @@ class CustomPDF(FPDF):
         self.multi_cell(0, 6, txt=FOOTER, align='C')
 
 
-def save_pdf(pdf, patient_name, document_text, cirurgia_name, observacao, document_date=None, include_date=False):
+def save_pdf(pdf, patient_name, document_text, cirurgia_name, observacao, termo_template, document_date=None, include_date=False):
     pdf.set_auto_page_break(auto=True, margin=25)
     pdf.add_page()
     pdf.set_font("Helvetica", size=10)
@@ -40,7 +40,8 @@ def save_pdf(pdf, patient_name, document_text, cirurgia_name, observacao, docume
             pdf.ln(5)
             pdf.multi_cell(0, 6, txt=f"Observações: {observacao}")
         pdf.add_page()
-    termo_result = tp.change_template(patient_name, cirurgia_name)
+    termo_result = tp.change_template(
+        patient_name, cirurgia_name, termo_template)
     pdf.ln(5)
     pdf.multi_cell(0, 5, txt=termo_result)
     if include_date and document_date is not None:
@@ -62,8 +63,8 @@ def main():
     client = init_connection()
 
     # Connect to the desired database
-    db = client.drtjm   
-    
+    db = client.drtjm
+
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
 
@@ -81,7 +82,7 @@ def main():
         'Selecione um template.',
         documents
     )
-    
+
     # get value from document
     doc_value = get_document_content(db, termos_coll, selected_file)
 
@@ -97,8 +98,9 @@ def main():
     if colb1.button('Criar Documento'):
         filename = "my_pdf.pdf"
         pdf = CustomPDF(orientation="P", unit="mm", format="A4")
+        termo_template = get_document_content(db, "outros", "Termo Geral")
         save_pdf(pdf, patient_name, document_text, cirurgia_name,
-                 observacao, document_date, include_date)
+                 observacao, termo_template, document_date, include_date)
         # Output the PDF
         pdf.output(filename)
 

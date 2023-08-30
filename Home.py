@@ -18,7 +18,7 @@ def main():
     # Create or get the session state
     if "session" not in st.session_state:
         st.session_state.session = qm.SessionState()
-    
+
     if 'patient_name' not in st.session_state:
         st.session_state['patient_name'] = ''
 
@@ -28,7 +28,7 @@ def main():
 
     # Connect to the desired database
     db = client.my_test_db
-    
+
     # Define o caminho para o diretório "data"
     data_dir = "src/tabelas"
 

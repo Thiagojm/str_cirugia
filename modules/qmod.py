@@ -4,14 +4,17 @@ import json
 from base64 import b64decode
 import hashlib
 from Crypto.Cipher import AES
-      
+
 # Define a class to handle session state
+
+
 class SessionState:
     def __init__(self):
         self.messages = []
 
+
 def show_pdf(file_path):
-    with open(file_path,"rb") as f:
+    with open(file_path, "rb") as f:
         base64_pdf = base64.b64encode(f.read()).decode('utf-8')
     pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="600" height="550" type="application/pdf"></iframe>'
     st.markdown(pdf_display, unsafe_allow_html=True)
@@ -21,6 +24,7 @@ def load_and_decrypt(filename, password):
     with open(filename, 'r') as f:
         enc_data = json.load(f)
     return decrypt(enc_data, password)
+
 
 def decrypt(enc_dict, password):
     # Convert password to 32 byte AES key
@@ -42,6 +46,8 @@ def decrypt(enc_dict, password):
     return data
 
 # Define a função calculate
+
+
 def calculate(checked_boxes, extra_values, data):
     try:
         nome_cirurgia = checked_boxes
@@ -88,7 +94,7 @@ def calculate(checked_boxes, extra_values, data):
 
         if extras[6] != "0":
             valor_equipe_cirurgia = int(extras[6])
-        
+
         valor_hosp_hmcc = valor_hmcc(tempo, diaria, data["HMCC"])
         valor_hosp_unimed = valor_unimed(tempo, diaria, data["UNIMED"])
         valor_hosp_hmd = valor_hmd(tempo, diaria, data["HMD"])
@@ -101,26 +107,35 @@ def calculate(checked_boxes, extra_values, data):
             valor_anestesia_renata + valor_hosp_hmd
         print_cir = " , ".join(nome_cirurgia)
         message = ""
-        message = " \n".join([message, f"Cirurgia(s) a ser(em) realizada(s): {print_cir} "])    
+        message = " \n".join(
+            [message, f"Cirurgia(s) a ser(em) realizada(s): {print_cir} "])
         message = " \n".join([message, f"Tempo total de sala: {tempo} horas "])
         message = " \n".join([message, f"Dias de internamento: {diaria} "])
-        message = " \n".join([message, f"Valor da equipe: {valor_equipe_cirurgia} "])
-        message = " \n".join([message, f"Valor da anestesia HMCC/ Unimed: {valor_anestesista_foz} "])
+        message = " \n".join(
+            [message, f"Valor da equipe: {valor_equipe_cirurgia} "])
+        message = " \n".join(
+            [message, f"Valor da anestesia HMCC/ Unimed: {valor_anestesista_foz} "])
         # message = " \n".join([message, f"Valor da anestesia HMD: {valor_anestesia_renata} "])
         if valor_protese != 0:
             valor_total_hmcc += valor_protese
             valor_total_unimed += valor_protese
             valor_total_hmd += valor_protese
-            message = " \n".join([message, f"Valor da prótese {tipo_protese}: {valor_protese} "])
+            message = " \n".join(
+                [message, f"Valor da prótese {tipo_protese}: {valor_protese} "])
         if tempo_lipo > 0:
-            message = " \n".join([message, f"Tempo de Lipo: {tempo_lipo} horas "])
-        # message = " \n".join([message, f"Valor do hospitalar HMD: {valor_hosp_hmd} "])    
-        message = " \n".join([message, f"Valor do hospitalar Unimed: {valor_hosp_unimed} "])
-        message = " \n".join([message, f"Valor do hospitalar HMCC: {valor_hosp_hmcc} "])
+            message = " \n".join(
+                [message, f"Tempo de Lipo: {tempo_lipo} horas "])
+        # message = " \n".join([message, f"Valor do hospitalar HMD: {valor_hosp_hmd} "])
+        message = " \n".join(
+            [message, f"Valor do hospitalar Unimed: {valor_hosp_unimed} "])
+        message = " \n".join(
+            [message, f"Valor do hospitalar HMCC: {valor_hosp_hmcc} "])
         # message = " \n".join([message, f"Valor total HMD: {valor_total_hmd} "])
-        message = " \n".join([message, f"Valor total Unimed: {valor_total_unimed} "])
-        message = " \n".join([message, f"Valor total HMCC: {valor_total_hmcc} "])
-        message = " \n".join([message, "\n" + "#" * 29 + "\n" ])
+        message = " \n".join(
+            [message, f"Valor total Unimed: {valor_total_unimed} "])
+        message = " \n".join(
+            [message, f"Valor total HMCC: {valor_total_hmcc} "])
+        message = " \n".join([message, "\n" + "#" * 29 + "\n"])
         return message
     except Exception as e:
         st.error(f"Prencha todos os campos ou deixe em '0'.\nErro: {e}")
@@ -190,7 +205,8 @@ def valor_anestesia_foz(nome_cirurgia, tempo_lipo, anestesia_foz):
         )
         lista_valores = list(sorted_dict.values())
     elif "Lipoescultura(3h)" in sorted_dict:
-        sorted_dict["Lipoescultura(3h)"] = sorted_dict["Lipoescultura(3h)"] * tempo_lipo
+        sorted_dict["Lipoescultura(3h)"] = sorted_dict["Lipoescultura(3h)"] * \
+            tempo_lipo
         lista_valores = list(sorted_dict.values())
     valor = lista_valores[0]
     lista_valores.pop(0)

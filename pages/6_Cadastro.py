@@ -17,7 +17,7 @@ def main():
 
     # Connect to the desired database
     db = client.drtjm
-    
+
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
 
@@ -42,8 +42,10 @@ def main():
             updated_content = st.text_area(
                 'Conteúdo do Arquivo', value=content, height=500)
             if st.button('Salvar modificações'):
-                num_edited = update_document_content_by_field(db, directory, file_to_edit, updated_content)
-                st.toast(f'{num_edited} arquivo editado com sucesso', icon="✔️")
+                num_edited = update_document_content_by_field(
+                    db, directory, file_to_edit, updated_content)
+                st.toast(
+                    f'{num_edited} arquivo editado com sucesso', icon="✔️")
         else:
             st.write('Sem arquivos nesse diretório')
 

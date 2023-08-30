@@ -1,6 +1,8 @@
 import json
 
 # corrige os valores das tabelas de acordo com o fator de correção
+
+
 def update_values(file, factor):
     with open(file, "r", encoding='utf8') as j:
         data = json.load(j)

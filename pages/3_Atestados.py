@@ -52,8 +52,8 @@ def main():
     client = init_connection()
 
     # Connect to the desired database
-    db = client.drtjm    
-    
+    db = client.drtjm
+
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
 
@@ -73,7 +73,7 @@ def main():
         'Selecione um template.',
         documents
     )
-    
+
     # get value from document
     doc_value = get_document_content(db, atestados_coll, selected_file)
 

@@ -5,6 +5,7 @@ import modules.qmod as qm
 import streamlit_authenticator as stauth
 import os
 from modules.cred_file import *
+from modules.mongo_mod import *
 
 
 class CustomPDF(FPDF):
@@ -74,6 +75,13 @@ def main():
     if 'cirurgia_name' not in st.session_state:
         st.session_state['cirurgia_name'] = ''
 
+    # Start Db
+    # Create a connection using MongoClient
+    client = init_connection()
+
+    # Connect to the desired database
+    db = client.drtjm
+
     # Lista padrão de exames
     lista_padrao = ["Hemograma Completo_labs", "TAP, TTPA_labs", "Eletrocardiograma com laudo_cardio", "Uréia e Creatinina_labs", "Glicemia_labs",
                     "Sódio e Potássio_labs", "Vitamina D_labs", "Beta-HCG_labs", "Anestesiologia (Whats/ Tel: 3576-8081)_aval", "Radiografia de Tórax PA + P_imagem"]
@@ -114,16 +122,16 @@ def main():
 
     # Read the file and create a checkbox for each line, alternating between the two columns
     selections = {}  # Dictionary to store the selections
-    with open("src/labs/Labs.txt", "r", encoding="UTF-8") as file:
-        lines = file.readlines()
-        for i in range(len(lines)):
-            # Remove the newline character at the end of the line
-            line = lines[i].strip()
-            # Alternate between columns based on the index of the line
-            if i % 2 == 0:
-                selections[line] = col1.checkbox(line, key=line + "_labs")
-            else:
-                selections[line] = col2.checkbox(line, key=line + "_labs")
+    content = get_document_content(db, "outros", "Labs")
+    lines = content.splitlines()
+    for i in range(len(lines)):
+        # Remove the newline character at the end of the line
+        line = lines[i]
+        # Alternate between columns based on the index of the line
+        if i % 2 == 0:
+            selections[line] = col1.checkbox(line, key=line + "_labs")
+        else:
+            selections[line] = col2.checkbox(line, key=line + "_labs")
 
     # Add a text area for additional notes or input
     outros_exames = st.text_area("Exames Adicionais", "", key="outr_ex")
@@ -137,18 +145,18 @@ def main():
 
     # Read the file and create a checkbox for each line, alternating between the two columns
     imagem_selections = {}  # Dictionary to store the selections
-    with open("src/imagem/imagem.txt", "r", encoding="UTF-8") as file:
-        lines = file.readlines()
-        for i in range(len(lines)):
-            # Remove the newline character at the end of the line
-            line = lines[i].strip()
-            # Alternate between columns based on the index of the line
-            if i % 2 == 0:
-                imagem_selections[line] = col2.checkbox(
-                    line, key=line + "_imagem")
-            else:
-                imagem_selections[line] = col3.checkbox(
-                    line, key=line + "_imagem")
+    content = get_document_content(db, "outros", "Imagem")
+    lines = content.splitlines()
+    for i in range(len(lines)):
+        # Remove the newline character at the end of the line
+        line = lines[i]
+        # Alternate between columns based on the index of the line
+        if i % 2 == 0:
+            imagem_selections[line] = col2.checkbox(
+                line, key=line + "_imagem")
+        else:
+            imagem_selections[line] = col3.checkbox(
+                line, key=line + "_imagem")
 
     # Add a text area for additional notes or input
     outros_imagem = st.text_area("Exames Adicionais", "", key="outros_img")
@@ -161,18 +169,18 @@ def main():
 
     # Read the file and create a checkbox for each line, alternating between the two columns
     cardio_selections = {}  # Dictionary to store the selections
-    with open("src/cardio/cardio.txt", "r", encoding="UTF-8") as file:
-        lines = file.readlines()
-        for i in range(len(lines)):
-            # Remove the newline character at the end of the line
-            line = lines[i].strip()
-            # Alternate between columns based on the index of the line
-            if i % 2 == 0:
-                cardio_selections[line] = col4.checkbox(
-                    line, key=line + "_cardio")
-            else:
-                cardio_selections[line] = col5.checkbox(
-                    line, key=line + "_cardio")
+    content = get_document_content(db, "outros", "Cardio")
+    lines = content.splitlines()
+    for i in range(len(lines)):
+        # Remove the newline character at the end of the line
+        line = lines[i]
+        # Alternate between columns based on the index of the line
+        if i % 2 == 0:
+            cardio_selections[line] = col4.checkbox(
+                line, key=line + "_cardio")
+        else:
+            cardio_selections[line] = col5.checkbox(
+                line, key=line + "_cardio")
 
     st.divider()
     st.header('Avaliação de Especialista')
@@ -181,13 +189,13 @@ def main():
     cirurgia_name = st.text_input(
         'Indicação', value=st.session_state.cirurgia_name, key="cirurgia_name")
     aval_selections = {}  # Dictionary to store the selections
-    with open("src/aval/aval.txt", "r", encoding="UTF-8") as file:
-        lines = file.readlines()
-        for i in range(len(lines)):
-            # Remove the newline character at the end of the line
-            line = lines[i].strip()
-            # Alternate between columns based on the index of the line
-            aval_selections[line] = st.checkbox(line, key=line + "_aval")
+    content = get_document_content(db, "outros", "Aval")
+    lines = content.splitlines()
+    for i in range(len(lines)):
+        # Remove the newline character at the end of the line
+        line = lines[i].strip()
+        # Alternate between columns based on the index of the line
+        aval_selections[line] = st.checkbox(line, key=line + "_aval")
 
     outro_esp = st.text_input("Outro", "", key="outro_esp")
     # Add a text area for additional notes or input

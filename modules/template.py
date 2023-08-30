@@ -4,18 +4,15 @@ from string import Template
 class MyTemplate(Template):
     delimiter = '&'
 
-def change_template(patient_name, cirurgia_name):
-    
+
+def change_template(patient_name, cirurgia_name, termo_template):
+
     d = {
-    'patient_name': patient_name,
-    'cirurgia_name': cirurgia_name
+        'patient_name': patient_name,
+        'cirurgia_name': cirurgia_name
     }
-    with open('src/outros/Termo Geral.txt', 'r', encoding="UTF-8") as f:
-        src = MyTemplate(f.read())    
-        termo_result = src.substitute(d)
-        
+
+    src = MyTemplate(termo_template)
+    termo_result = src.substitute(d)
+
     return termo_result
-    
-
-
-

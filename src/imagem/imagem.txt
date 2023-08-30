@@ -1,6 +1,0 @@
-Radiografia de Tórax PA + P
-Ultrassonografia de Mamas (com classificação BIRADS)
-Mamografia bilateral (com classificação BIRADS)
-Ultrassonografia de Parede abdominal (para investigação de hérnias/ diástase)
-Ultrassonografia de Abdome Total
-Tomografia Computadorizada de Face
