@@ -10,3 +10,5 @@ gatherUsageStats = false
 serverPort = 8501
 [global]
 disableWidgetStateDuplicationWarning = true
+[theme]
+base="dark"
