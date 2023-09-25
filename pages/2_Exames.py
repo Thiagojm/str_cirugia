@@ -203,7 +203,7 @@ def main():
         "Observações", "Solicito liberação pré-operatória.", key="obs_aval")
     st.divider()
 
-    document_date = st.date_input('Data do Documento', value=None, )
+    document_date = st.date_input('Data do Documento')
     include_date = st.checkbox('Incluir data no documento')
 
     st.divider()

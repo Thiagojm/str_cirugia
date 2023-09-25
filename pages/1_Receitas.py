@@ -78,7 +78,7 @@ def main():
 
     document_text = st.text_area(
         'Texto do Documento', height=300, value=doc_value)
-    document_date = st.date_input('Data do Documento', value=None)
+    document_date = st.date_input('Data do Documento')
     include_date = st.checkbox('Incluir data no documento')
 
     colb1, colb2 = st.columns(2)
