@@ -47,6 +47,9 @@ def main():
     if 'patient_name' not in st.session_state:
         st.session_state['patient_name'] = ''
 
+    if 'cirurgia_name' not in st.session_state:
+        st.session_state['cirurgia_name'] = ''
+
     # Start Db
     # Create a connection using MongoClient
     client = init_connection()

@@ -87,19 +87,21 @@ def main():
     doc_value = get_document_content(db, termos_coll, selected_file)
 
     cirurgia_name = st.text_input(
-        'Qual Cirurgia?', value=st.session_state.cirurgia_name, key="cirurgia_name")
+        'Qual Cirurgia?', value=st.session_state.cirurgia_name, key="cir_name")
+    st.session_state.cirurgia_name = cirurgia_name
     observacao = st.text_area('Observações', value="")
     document_text = st.text_area(
         'Texto do Documento', height=300, value=doc_value)
-    document_date = st.date_input('Data do Documento')
-    include_date = st.checkbox('Incluir data no documento')
+    document_date = None
+    include_date = None
 
     colb1, colb2 = st.columns(2)
     if colb1.button('Criar Documento'):
         filename = "my_pdf.pdf"
+        cirurgia_formated = f"{cirurgia_name.upper()},"
         pdf = CustomPDF(orientation="P", unit="mm", format="A4")
         termo_template = get_document_content(db, "outros", "Termo Geral")
-        save_pdf(pdf, patient_name, document_text, cirurgia_name,
+        save_pdf(pdf, patient_name, document_text, cirurgia_formated,
                  observacao, termo_template, document_date, include_date)
         # Output the PDF
         pdf.output(filename)
@@ -133,3 +135,4 @@ if __name__ == "__main__":
 
     if authentication_status:
         main()
+

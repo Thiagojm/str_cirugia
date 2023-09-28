@@ -187,7 +187,8 @@ def main():
     # Here you can add the elements you want to show under "Avaliação de Especialista"
     # Read the file and create a checkbox for each line, alternating between the two columns
     cirurgia_name = st.text_input(
-        'Indicação', value=st.session_state.cirurgia_name, key="cirurgia_name")
+        'Indicação', value=st.session_state.cirurgia_name, key="cir_name")
+    st.session_state.cirurgia_name = cirurgia_name
     aval_selections = {}  # Dictionary to store the selections
     content = get_document_content(db, "outros", "Aval")
     lines = content.splitlines()
