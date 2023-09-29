@@ -8,6 +8,14 @@ from modules.cred_file import *
 from modules.mongo_mod import *
 
 
+st.set_page_config(
+    page_title="Receitas",
+    page_icon="🧊",
+    layout="centered",
+    initial_sidebar_state="auto",
+)
+
+
 class CustomPDF(FPDF):
     def header(self):
         self.set_font("Helvetica", 'BI', size=14)

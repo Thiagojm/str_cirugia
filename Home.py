@@ -6,7 +6,16 @@ import modules.qmod as qm
 from modules.mongo_mod import *
 
 
+st.set_page_config(
+    page_title="Home",
+    page_icon="🧊",
+    layout="centered",
+    initial_sidebar_state="auto",
+)
+
 # Clear cirurgias e messages
+
+
 def false_callback():
     for k in st.session_state.keys():
         if k.endswith("_cir"):

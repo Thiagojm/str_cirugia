@@ -2,9 +2,16 @@ import streamlit as st
 import streamlit_authenticator as stauth
 
 
+st.set_page_config(
+    page_title="Imposto",
+    page_icon="🧊",
+    layout="centered",
+    initial_sidebar_state="auto",
+)
+
+
 def main():
 
-    # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
     authenticator.logout("Logout", "sidebar")
 
     st.title('Cálculo de Imposto')
@@ -65,7 +72,7 @@ def main():
         if valor_bruto:
             st.markdown("### Outras Informações")
             st.write(
-                f"Valor aproximado dos tributos de 15,33% = R$ {data_2.get('Imposto de 15,33%')}  Lei 12.741/2012 Fonte: IBPT SERVIÇO PRESTADO POR SÓCIO DA EMPRESA, não estando obrigado a reter o INSS, conforme instrução normativa nº 971/2009 da RFB, artigo 120.")
+                f"Valor aproximado dos tributos de 15,33% = R$ {data_2.get('Imposto de 15,33%')}. Lei 12.741/2012 - Fonte: IBPT. SERVIÇO PRESTADO POR SÓCIO DA EMPRESA, não estando obrigado a reter o INSS, conforme instrução normativa nº 971/2009 da RFB, artigo 120.")
 
     st.divider()
 
@@ -85,9 +92,9 @@ def main():
                       IR - 1,5% - só se atingir 10 reais  
                       CSLL/COFINS/PIS que são recolhidos quando retidos em NF em uma guia só, a soma deles tem que ser maior de 10 reais!
                       """)
-    
+
     st.divider()
-    
+
     with st.container():
         st.markdown("Referente à consulta em bucomaxilofacial")
         st.markdown("Referente à procedimento em bucomaxilofacial")

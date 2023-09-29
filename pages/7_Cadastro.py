@@ -3,6 +3,14 @@ import streamlit_authenticator as stauth
 from modules.mongo_mod import *
 
 
+st.set_page_config(
+    page_title="Cadastro",
+    page_icon="🧊",
+    layout="centered",
+    initial_sidebar_state="auto",
+)
+
+
 def main():
 
     if 'patient_name' not in st.session_state:

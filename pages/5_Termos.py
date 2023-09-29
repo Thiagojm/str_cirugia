@@ -9,6 +9,14 @@ from modules.cred_file import *
 from modules.mongo_mod import *
 
 
+st.set_page_config(
+    page_title="Termos",
+    page_icon="🧊",
+    layout="centered",
+    initial_sidebar_state="auto",
+)
+
+
 class CustomPDF(FPDF):
     def header(self):
         self.set_font("Helvetica", 'BI', size=14)
@@ -135,4 +143,3 @@ if __name__ == "__main__":
 
     if authentication_status:
         main()
-
