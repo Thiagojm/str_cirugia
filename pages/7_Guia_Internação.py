@@ -1,7 +1,8 @@
-import os
 import streamlit as st
 import streamlit_authenticator as stauth
-import base64
+from modules.qmod import show_pdf_2
+import os
+
 
 
 st.set_page_config(
@@ -12,13 +13,6 @@ st.set_page_config(
 )
 
 
-def show_pdf(file_path):
-    with open(file_path, "rb") as f:
-        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="1000" height="1500" type="application/pdf"></iframe>'
-    st.markdown(pdf_display, unsafe_allow_html=True)
-
-
 def main():
 
     # Cria o menu suspenso na barra lateral com as opções e as tabelas em ordem
@@ -26,7 +20,7 @@ def main():
 
     st.title('Guia de Internação')
     filename = "src/Internacao.pdf"
-    show_pdf(filename)
+    show_pdf_2(filename)
 
     st.divider()
     
