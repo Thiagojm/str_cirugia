@@ -15,7 +15,7 @@ st.set_page_config(
 def main():
     authenticator.logout("Logout", "sidebar")
 
-    st.title('Excel Sheet Viewer')
+    st.title('Tabela TUSS')
 
     uploaded_file = "src/AMB TUSS ORDENADA.xlsx"
 
