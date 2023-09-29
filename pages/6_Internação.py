@@ -6,7 +6,7 @@ import base64
 
 st.set_page_config(
     page_title="Internação",
-    page_icon="🐓",
+    page_icon="🧊",
     layout="wide",
     initial_sidebar_state="auto",
 )
