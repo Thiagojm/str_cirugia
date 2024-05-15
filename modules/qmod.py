@@ -123,7 +123,8 @@ def calculate(checked_boxes, extra_values, data):
             [message, f"Valor da anestesia HMCC/ Unimed: {valor_anestesista_foz} "])
         # message = " \n".join([message, f"Valor da anestesia HMD: {valor_anestesia_renata} "])
         if valor_protese != 0:
-            valor_total_hmcc += valor_protese
+            # 10% a mais no valor da protese do HMCC
+            valor_total_hmcc += (valor_protese * 1.1)
             valor_total_unimed += valor_protese
             valor_total_hmd += valor_protese
             message = " \n".join(

@@ -97,7 +97,7 @@ def main():
             if st.button("Save"):
                 # Save decrypted data
                 save_decrypted(
-                    new_dict, f'{os.path.join(directory_path, new_name)}enc.json')
+                    new_dict, f'{os.path.join(directory_path, new_name)}upt.json')
                 st.toast("Updated")
 
         elif action == 'Encrypt':
@@ -117,7 +117,8 @@ def main():
                 encrypted = encrypt(json_data, password)
 
                 # Save encrypted data
-                save_encrypted(encrypted, f'{full_file_path}_enc.json')
+                file_to_save = os.path.join(directory_path, "new_encrypted")
+                save_encrypted(encrypted, f'{file_to_save}.json')
                 st.toast("Encrypted")
 
         elif action == 'Decrypt':
@@ -131,8 +132,9 @@ def main():
                 # Save decrypted data
                 save_decrypted(decrypted, f'{full_file_path}_dec.json')
                 st.toast("Decrypted")
-    except Exception:
+    except Exception as e:
         st.toast("Incorrect Password, try again!", icon="❗")
+        print(e)
     
 
 if __name__ == '__main__':
