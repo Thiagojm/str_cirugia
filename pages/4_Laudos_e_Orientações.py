@@ -19,19 +19,19 @@ st.set_page_config(
 class CustomPDF(FPDF):
     def header(self):
         self.set_font("Helvetica", 'BI', size=14)
-        self.cell(0, 10, txt=NAME,
+        self.cell(0, 10, text=NAME,
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
-        self.cell(0, 10, txt=ESPECIALIDADE,
+        self.cell(0, 10, text=ESPECIALIDADE,
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
-        self.cell(0, 10, txt=("_" * 60), new_x=XPos.LMARGIN,
+        self.cell(0, 10, text=("_" * 60), new_x=XPos.LMARGIN,
                   new_y=YPos.NEXT, align='C')
 
     def footer(self):
         self.set_y(-40)
         self.set_font("Helvetica", size=10)
-        self.cell(0, 10, txt=("_" * 60), new_x=XPos.LMARGIN,
+        self.cell(0, 10, text=("_" * 60), new_x=XPos.LMARGIN,
                   new_y=YPos.NEXT, align='C')
-        self.multi_cell(0, 10, txt=FOOTER, align='C')
+        self.multi_cell(0, 10, text=FOOTER, align='C')
 
 
 def save_pdf(pdf, patient_name, document_text, doc_type, document_date=None, include_date=False):
@@ -39,15 +39,15 @@ def save_pdf(pdf, patient_name, document_text, doc_type, document_date=None, inc
     pdf.add_page()
     pdf.set_font("Helvetica", size=12)
     if doc_type:
-        pdf.cell(0, 20, txt=doc_type, new_x=XPos.LMARGIN,
+        pdf.cell(0, 20, text=doc_type, new_x=XPos.LMARGIN,
                  new_y=YPos.NEXT, align='C')
-    pdf.cell(0, 20, txt=f"Nome: {patient_name}",
+    pdf.cell(0, 20, text=f"Nome: {patient_name}",
              new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='L')
     pdf.ln(10)
-    pdf.multi_cell(0, 10, txt=document_text)
+    pdf.multi_cell(0, 10, text=document_text)
     if include_date and document_date is not None:
         pdf.ln(30)
-        pdf.cell(0, 10, txt=f"{document_date.strftime('%d/%m/%Y')}",
+        pdf.cell(0, 10, text=f"{document_date.strftime('%d/%m/%Y')}",
                  new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
 
 

@@ -20,19 +20,19 @@ st.set_page_config(
 class CustomPDF(FPDF):
     def header(self):
         self.set_font("Helvetica", 'BI', size=14)
-        self.cell(0, 10, txt=TERMO_NAME,
+        self.cell(0, 10, text=TERMO_NAME,
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
-        self.cell(0, 8, txt=TERMO_TXT,
+        self.cell(0, 8, text=TERMO_TXT,
                   new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
-        self.cell(0, 8, txt=("_" * 60), new_x=XPos.LMARGIN,
+        self.cell(0, 8, text=("_" * 60), new_x=XPos.LMARGIN,
                   new_y=YPos.NEXT, align='C')
 
     def footer(self):
         self.set_y(-30)
         self.set_font("Helvetica", size=8)
-        self.cell(0, 6, txt=("_" * 110), new_x=XPos.LMARGIN,
+        self.cell(0, 6, text=("_" * 110), new_x=XPos.LMARGIN,
                   new_y=YPos.NEXT, align='C')
-        self.multi_cell(0, 6, txt=FOOTER, align='C')
+        self.multi_cell(0, 6, text=FOOTER, align='C')
 
 
 def save_pdf(pdf, patient_name, document_text, cirurgia_name, observacao, termo_template, document_date=None, include_date=False):
@@ -40,21 +40,21 @@ def save_pdf(pdf, patient_name, document_text, cirurgia_name, observacao, termo_
     pdf.add_page()
     pdf.set_font("Helvetica", size=10)
     if document_text:
-        pdf.cell(0, 10, txt=TERMO_TXT,
+        pdf.cell(0, 10, text=TERMO_TXT,
                  new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
         pdf.ln(5)
-        pdf.multi_cell(0, 6, txt=document_text)
+        pdf.multi_cell(0, 6, text=document_text)
         if observacao:
             pdf.ln(5)
-            pdf.multi_cell(0, 6, txt=f"Observações: {observacao}")
+            pdf.multi_cell(0, 6, text=f"Observações: {observacao}")
         pdf.add_page()
     termo_result = tp.change_template(
         patient_name, cirurgia_name, termo_template)
     pdf.ln(5)
-    pdf.multi_cell(0, 5, txt=termo_result)
+    pdf.multi_cell(0, 5, text=termo_result)
     if include_date and document_date is not None:
         pdf.ln(30)
-        pdf.cell(0, 10, txt=f"{document_date.strftime('%d/%m/%Y')}",
+        pdf.cell(0, 10, text=f"{document_date.strftime('%d/%m/%Y')}",
                  new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='C')
 
 
