@@ -92,12 +92,27 @@ def main():
                 decrypted = load_and_decrypt(full_file_path, password)
                 dec_str = json.dumps(decrypted, ensure_ascii=False)
                 new_file = st.text_area("File to Update", dec_str, height=500)
-                new_dict = json.loads(new_file)            
+                new_dict = json.loads(new_file)
+                up_file_name = f'{os.path.join(directory_path, new_name)}_upt.json'          
 
             if st.button("Save"):
                 # Save decrypted data
                 save_decrypted(
-                    new_dict, f'{os.path.join(directory_path, new_name)}upt.json')
+                    new_dict, up_file_name)
+                
+                # Encrypt process
+                with open(up_file_name, encoding='utf-8') as f:
+                    data = json.load(f)
+
+                # Convert JSON data to string
+                json_data = json.dumps(data).encode('utf-8')
+                # Encrypt data
+                encrypted = encrypt(json_data, password)
+
+                # Save encrypted data
+                file_to_save = os.path.join(directory_path, f"{new_name}_enc")
+                save_encrypted(encrypted, f'{file_to_save}.json')                
+                
                 st.toast("Updated")
 
         elif action == 'Encrypt':
